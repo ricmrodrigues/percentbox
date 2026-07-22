@@ -32,19 +32,25 @@ export function Header() {
             href="/percentage-calculator"
             className="hidden text-sm font-medium text-slate-600 transition hover:text-emerald-600 dark:text-slate-300 dark:hover:text-emerald-400 md:inline"
           >
-            Calculator
+            % Calc
           </Link>
           <Link
-            href="/tip-calculator"
+            href="/loan-calculator"
             className="hidden text-sm font-medium text-slate-600 transition hover:text-emerald-600 dark:text-slate-300 dark:hover:text-emerald-400 sm:inline"
           >
-            Tip
+            Loan
           </Link>
           <Link
-            href="/discount-calculator"
+            href="/vat-calculator"
             className="hidden text-sm font-medium text-slate-600 transition hover:text-emerald-600 dark:text-slate-300 dark:hover:text-emerald-400 sm:inline"
           >
-            Discount
+            VAT
+          </Link>
+          <Link
+            href="/markup-calculator"
+            className="hidden text-sm font-medium text-slate-600 transition hover:text-emerald-600 dark:text-slate-300 dark:hover:text-emerald-400 lg:inline"
+          >
+            Markup
           </Link>
           <Link
             href="/about"

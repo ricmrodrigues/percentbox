@@ -70,6 +70,21 @@ const nextConfig: NextConfig = {
         destination: "/percentage-change-calculator",
         permanent: true,
       },
+      {
+        source: "/emi-calculator",
+        destination: "/loan-calculator",
+        permanent: true,
+      },
+      {
+        source: "/sales-tax-calculator",
+        destination: "/vat-calculator",
+        permanent: true,
+      },
+      {
+        source: "/margin-calculator",
+        destination: "/markup-calculator",
+        permanent: true,
+      },
     ];
   },
 };

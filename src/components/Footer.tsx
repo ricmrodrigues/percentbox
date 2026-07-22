@@ -3,7 +3,9 @@ import { TOOLS } from "@/lib/seo";
 
 export function Footer() {
   const year = new Date().getFullYear();
-  const calcLinks = TOOLS.slice(0, 6);
+  const mid = Math.ceil(TOOLS.length / 2);
+  const colA = TOOLS.slice(0, mid);
+  const colB = TOOLS.slice(mid);
 
   return (
     <footer className="mt-auto border-t border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
@@ -24,8 +26,8 @@ export function Footer() {
               </span>
             </div>
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-slate-500 dark:text-slate-400">
-              Fast, free percentage calculator for everyday math — tips,
-              discounts, increases, and more. No signup required.
+              Free calculators for percentages, VAT, markup, compound interest,
+              loans, tips, and discounts. No signup required.
             </p>
           </div>
 
@@ -34,7 +36,7 @@ export function Footer() {
               Calculators
             </h2>
             <ul className="mt-3 space-y-2 text-sm text-slate-500 dark:text-slate-400">
-              {calcLinks.map((t) => (
+              {colA.map((t) => (
                 <li key={t.slug}>
                   <Link
                     href={`/${t.slug}`}
@@ -52,7 +54,7 @@ export function Footer() {
               More tools
             </h2>
             <ul className="mt-3 space-y-2 text-sm text-slate-500 dark:text-slate-400">
-              {TOOLS.slice(6).map((t) => (
+              {colB.map((t) => (
                 <li key={t.slug}>
                   <Link
                     href={`/${t.slug}`}
@@ -62,14 +64,6 @@ export function Footer() {
                   </Link>
                 </li>
               ))}
-              <li>
-                <Link
-                  href="/percentage-calculator"
-                  className="hover:text-emerald-600 dark:hover:text-emerald-400"
-                >
-                  All-in-one calculator
-                </Link>
-              </li>
             </ul>
           </div>
 

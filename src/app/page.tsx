@@ -78,26 +78,33 @@ export default function Home() {
               fast, and built for mobile.
             </p>
             <p className="mx-auto mt-3 max-w-xl text-sm text-slate-500 dark:text-slate-500">
-              Also try our{" "}
+              Also try{" "}
               <a
-                href="/tip-calculator"
+                href="/loan-calculator"
                 className="font-medium text-emerald-700 underline-offset-2 hover:underline dark:text-emerald-400"
               >
-                tip calculator
+                loan / EMI
               </a>
               ,{" "}
               <a
-                href="/discount-calculator"
+                href="/vat-calculator"
                 className="font-medium text-emerald-700 underline-offset-2 hover:underline dark:text-emerald-400"
               >
-                discount calculator
+                VAT
+              </a>
+              ,{" "}
+              <a
+                href="/markup-calculator"
+                className="font-medium text-emerald-700 underline-offset-2 hover:underline dark:text-emerald-400"
+              >
+                markup &amp; margin
               </a>
               , and{" "}
               <a
-                href="/percentage-change-calculator"
+                href="/compound-interest-calculator"
                 className="font-medium text-emerald-700 underline-offset-2 hover:underline dark:text-emerald-400"
               >
-                percentage change calculator
+                compound interest
               </a>
               .
             </p>
@@ -152,12 +159,13 @@ export default function Home() {
                 <ul className="mt-3 space-y-2 text-sm">
                   {[
                     ["What is X% of Y?", "/what-is-x-percent-of-y"],
-                    ["X is what % of Y?", "/x-is-what-percent-of-y"],
-                    ["Percentage increase", "/percentage-increase-calculator"],
-                    ["Percentage decrease", "/percentage-decrease-calculator"],
-                    ["Percentage change", "/percentage-change-calculator"],
+                    ["Markup / margin", "/markup-calculator"],
+                    ["VAT / sales tax", "/vat-calculator"],
+                    ["Compound interest", "/compound-interest-calculator"],
+                    ["Loan / EMI", "/loan-calculator"],
                     ["Tip calculator", "/tip-calculator"],
                     ["Discount calculator", "/discount-calculator"],
+                    ["Percentage change", "/percentage-change-calculator"],
                   ].map(([label, href]) => (
                     <li key={href}>
                       <a

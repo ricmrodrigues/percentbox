@@ -15,6 +15,10 @@ Language: en
 - [Percentage Change](https://percentbox.com/percentage-change-calculator): Change from A to B
 - [Tip Calculator](https://percentbox.com/tip-calculator): Tip, total, and split bill
 - [Discount Calculator](https://percentbox.com/discount-calculator): Sale price and savings
+- [Markup / Margin](https://percentbox.com/markup-calculator): Cost, sell, markup %, margin %
+- [VAT Calculator](https://percentbox.com/vat-calculator): Add or extract sales tax / VAT
+- [Compound Interest](https://percentbox.com/compound-interest-calculator): Growth with contributions
+- [Loan / EMI](https://percentbox.com/loan-calculator): Fixed-rate payment + amortization
 - [About](https://percentbox.com/about): About PercentBox
 - [Privacy](https://percentbox.com/privacy): Privacy policy
 
@@ -27,6 +31,11 @@ Language: en
 - After decrease = value × (1 − p/100)
 - Tip = bill × (tip% ÷ 100); total = bill + tip
 - Discount savings = price × (d% ÷ 100); final = price − savings
+- Sell from markup = cost × (1 + markup%/100)
+- Sell from margin = cost ÷ (1 − margin%/100)
+- VAT gross = net × (1 + rate/100); net = gross ÷ (1 + rate/100)
+- Compound FV = P(1+r/n)^(nt) + PMT×[((1+r/n)^(nt)−1)/(r/n)]
+- Loan payment M = P×r(1+r)^n/((1+r)^n−1) with r = annual/12
 
 ## Notes
 

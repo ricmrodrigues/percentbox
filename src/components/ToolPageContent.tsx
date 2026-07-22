@@ -1,18 +1,42 @@
 import { Calculator } from "@/components/Calculator";
+import { CompoundInterestCalculator } from "@/components/calculators/CompoundInterestCalculator";
+import { LoanCalculator } from "@/components/calculators/LoanCalculator";
+import { MarkupCalculator } from "@/components/calculators/MarkupCalculator";
+import { VatCalculator } from "@/components/calculators/VatCalculator";
 import { RelatedTools } from "@/components/RelatedTools";
 import type { ToolPage } from "@/lib/seo";
 
-export function ToolPageContent({ tool }: { tool: ToolPage }) {
-  const direction =
-    tool.slug === "percentage-decrease-calculator" ? "decrease" : "increase";
+function ToolCalculator({ tool }: { tool: ToolPage }) {
+  switch (tool.kind) {
+    case "markup":
+      return <MarkupCalculator />;
+    case "vat":
+      return <VatCalculator />;
+    case "compound":
+      return <CompoundInterestCalculator />;
+    case "loan":
+      return <LoanCalculator />;
+    case "percent":
+    default: {
+      const direction =
+        tool.slug === "percentage-decrease-calculator"
+          ? "decrease"
+          : "increase";
+      return (
+        <Calculator
+          initialMode={tool.mode ?? "percent-of"}
+          initialDirection={direction}
+        />
+      );
+    }
+  }
+}
 
+export function ToolPageContent({ tool }: { tool: ToolPage }) {
   return (
     <div className="space-y-10">
       <div id="calculator" className="scroll-mt-20">
-        <Calculator
-          initialMode={tool.mode}
-          initialDirection={direction}
-        />
+        <ToolCalculator tool={tool} />
       </div>
 
       <section aria-labelledby="about-tool">
