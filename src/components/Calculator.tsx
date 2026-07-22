@@ -119,7 +119,7 @@ function QuickButtons({
             key={n}
             type="button"
             onClick={() => onSelect(n)}
-            className={`rounded-lg px-3 py-1.5 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 ${
+            className={`cursor-pointer rounded-lg px-3 py-1.5 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 ${
               isActive
                 ? "bg-emerald-600 text-white shadow-sm shadow-emerald-600/30"
                 : "bg-slate-100 text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-emerald-950 dark:hover:text-emerald-300"
@@ -285,7 +285,7 @@ export function Calculator() {
               aria-selected={active}
               title={MODE_META[m].title}
               onClick={() => switchMode(m)}
-              className={`flex min-h-[2.75rem] items-center justify-center rounded-xl px-2 py-2 text-center text-xs font-semibold leading-snug transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 sm:text-sm ${
+              className={`flex min-h-[2.75rem] cursor-pointer items-center justify-center rounded-xl px-2 py-2 text-center text-xs font-semibold leading-snug transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 sm:text-sm ${
                 active
                   ? "bg-emerald-600 text-white shadow-md shadow-emerald-600/25"
                   : "bg-white text-slate-600 ring-1 ring-slate-200 hover:bg-slate-50 hover:text-slate-900 dark:bg-slate-900 dark:text-slate-300 dark:ring-slate-700 dark:hover:bg-slate-800 dark:hover:text-white"
@@ -375,7 +375,7 @@ export function Calculator() {
                   <button
                     type="button"
                     onClick={() => setDirection("increase")}
-                    className={`flex-1 rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
+                    className={`flex-1 cursor-pointer rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
                       direction === "increase"
                         ? "bg-emerald-600 text-white shadow-sm"
                         : "bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300"
@@ -386,7 +386,7 @@ export function Calculator() {
                   <button
                     type="button"
                     onClick={() => setDirection("decrease")}
-                    className={`flex-1 rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
+                    className={`flex-1 cursor-pointer rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
                       direction === "decrease"
                         ? "bg-rose-600 text-white shadow-sm"
                         : "bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300"
@@ -590,7 +590,7 @@ export function Calculator() {
                 type="button"
                 onClick={copyResult}
                 disabled={!result}
-                className="inline-flex items-center gap-1.5 rounded-xl bg-white px-3 py-2 text-sm font-semibold text-emerald-700 shadow-sm ring-1 ring-emerald-200 transition hover:bg-emerald-50 disabled:cursor-not-allowed disabled:opacity-40 dark:bg-slate-800 dark:text-emerald-300 dark:ring-emerald-900 dark:hover:bg-slate-700"
+                className="inline-flex cursor-pointer items-center gap-1.5 rounded-xl bg-white px-3 py-2 text-sm font-semibold text-emerald-700 shadow-sm ring-1 ring-emerald-200 transition hover:bg-emerald-50 disabled:cursor-not-allowed disabled:opacity-40 dark:bg-slate-800 dark:text-emerald-300 dark:ring-emerald-900 dark:hover:bg-slate-700"
               >
                 {copied ? (
                   <>
@@ -615,7 +615,7 @@ export function Calculator() {
               <button
                 type="button"
                 onClick={clearAll}
-                className="inline-flex items-center justify-center rounded-xl px-3 py-2 text-sm font-medium text-slate-500 transition hover:bg-white/60 hover:text-slate-700 dark:hover:bg-slate-800/60 dark:hover:text-slate-300"
+                className="inline-flex cursor-pointer items-center justify-center rounded-xl px-3 py-2 text-sm font-medium text-slate-500 transition hover:bg-white/60 hover:text-slate-700 dark:hover:bg-slate-800/60 dark:hover:text-slate-300"
               >
                 Clear
               </button>
@@ -634,7 +634,7 @@ export function Calculator() {
             <button
               type="button"
               onClick={() => setHistory(clearHistory())}
-              className="text-xs font-medium text-slate-400 transition hover:text-rose-500"
+              className="cursor-pointer text-xs font-medium text-slate-400 transition hover:text-rose-500"
             >
               Clear history
             </button>
@@ -645,7 +645,7 @@ export function Calculator() {
                 <button
                   type="button"
                   onClick={() => applyHistory(item)}
-                  className="flex w-full items-center justify-between gap-3 py-2.5 text-left transition hover:opacity-80"
+                  className="flex w-full cursor-pointer items-center justify-between gap-3 py-2.5 text-left transition hover:opacity-80"
                 >
                   <div className="min-w-0">
                     <p className="truncate text-sm text-slate-600 dark:text-slate-300">
