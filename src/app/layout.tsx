@@ -1,27 +1,37 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { JsonLd } from "@/components/JsonLd";
+import {
+  SITE_NAME,
+  SITE_TAGLINE,
+  SITE_URL,
+  organizationJsonLd,
+  webAppJsonLd,
+  websiteJsonLd,
+} from "@/lib/seo";
 import "./globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://percentbox.com";
-
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Percentage Calculator — Free Online % Calculator | PercentBox",
     template: "%s | PercentBox",
   },
   description:
     "Free online percentage calculator. Instantly find what is X% of Y, percentage increase/decrease, tip, and discount. Fast, mobile-friendly, no signup.",
+  applicationName: SITE_NAME,
   keywords: [
     "percentage calculator",
     "what is x percent of y",
@@ -33,9 +43,12 @@ export const metadata: Metadata = {
     "discount calculator",
     "percent calculator online",
     "free percentage calculator",
+    "x is what percent of y",
+    "percent off calculator",
   ],
-  authors: [{ name: "PercentBox" }],
-  creator: "PercentBox",
+  authors: [{ name: SITE_NAME, url: SITE_URL }],
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
   icons: {
     icon: [
       { url: "/icon.svg", type: "image/svg+xml" },
@@ -47,26 +60,16 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: siteUrl,
-    siteName: "PercentBox",
+    url: SITE_URL,
+    siteName: SITE_NAME,
     title: "Percentage Calculator — Free Online % Calculator | PercentBox",
-    description:
-      "Calculate percentages instantly: X% of Y, percentage change, tips, and discounts. Clean, fast, and free.",
-    images: [
-      {
-        url: "/logo.png",
-        width: 512,
-        height: 512,
-        alt: "PercentBox logo",
-      },
-    ],
+    description: SITE_TAGLINE,
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Percentage Calculator | PercentBox",
     description:
       "Free online percentage calculator — tips, discounts, increase/decrease, and more.",
-    images: ["/logo.png"],
   },
   robots: {
     index: true,
@@ -76,12 +79,20 @@ export const metadata: Metadata = {
       follow: true,
       "max-image-preview": "large",
       "max-snippet": -1,
+      "max-video-preview": -1,
     },
   },
   alternates: {
-    canonical: siteUrl,
+    canonical: SITE_URL,
+    languages: {
+      "en-US": SITE_URL,
+      en: SITE_URL,
+    },
   },
   category: "utilities",
+  other: {
+    "msapplication-TileColor": "#059669",
+  },
 };
 
 export const viewport: Viewport = {
@@ -107,58 +118,9 @@ const themeScript = `
 })();
 `;
 
-const jsonLd = {
+const rootJsonLd = {
   "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "WebApplication",
-      name: "PercentBox Percentage Calculator",
-      url: siteUrl,
-      applicationCategory: "UtilityApplication",
-      operatingSystem: "Any",
-      offers: {
-        "@type": "Offer",
-        price: "0",
-        priceCurrency: "USD",
-      },
-      description:
-        "Free online percentage calculator for percent of, percentage change, tips, and discounts.",
-    },
-    {
-      "@type": "WebSite",
-      name: "PercentBox",
-      url: siteUrl,
-    },
-    {
-      "@type": "FAQPage",
-      mainEntity: [
-        {
-          "@type": "Question",
-          name: "How do I calculate a percentage of a number?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "Multiply the number by the percentage, then divide by 100. For example, 20% of 150 is (20 ÷ 100) × 150 = 30.",
-          },
-        },
-        {
-          "@type": "Question",
-          name: "How is percentage increase calculated?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "Percentage change = ((new − original) ÷ |original|) × 100. If a price goes from $80 to $100, the increase is 25%.",
-          },
-        },
-        {
-          "@type": "Question",
-          name: "How do I calculate a tip?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "Multiply the bill by the tip percentage divided by 100. An 18% tip on $64.50 is $11.61, for a total of $76.11.",
-          },
-        },
-      ],
-    },
-  ],
+  "@graph": [organizationJsonLd(), websiteJsonLd(), webAppJsonLd()],
 };
 
 export default function RootLayout({
@@ -170,10 +132,8 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning className="h-full">
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
+        <JsonLd data={rootJsonLd} />
+        <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} flex min-h-full flex-col antialiased`}

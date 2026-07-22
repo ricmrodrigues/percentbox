@@ -1,11 +1,12 @@
 import Image from "next/image";
+import Link from "next/link";
 import { ThemeToggle } from "./ThemeToggle";
 
 export function Header() {
   return (
     <header className="sticky top-0 z-40 border-b border-slate-200/80 bg-white/80 backdrop-blur-md dark:border-slate-800 dark:bg-slate-950/80">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:h-16 sm:px-6">
-        <a href="/" className="group flex items-center gap-2.5">
+        <Link href="/" className="group flex items-center gap-2.5">
           <Image
             src="/logo.png"
             alt="PercentBox"
@@ -22,20 +23,35 @@ export function Header() {
               Free percentage calculator
             </span>
           </div>
-        </a>
-        <nav className="flex items-center gap-2 sm:gap-3">
-          <a
-            href="#how-it-works"
+        </Link>
+        <nav
+          aria-label="Primary"
+          className="flex items-center gap-2 sm:gap-3"
+        >
+          <Link
+            href="/percentage-calculator"
+            className="hidden text-sm font-medium text-slate-600 transition hover:text-emerald-600 dark:text-slate-300 dark:hover:text-emerald-400 md:inline"
+          >
+            Calculator
+          </Link>
+          <Link
+            href="/tip-calculator"
             className="hidden text-sm font-medium text-slate-600 transition hover:text-emerald-600 dark:text-slate-300 dark:hover:text-emerald-400 sm:inline"
           >
-            How it works
-          </a>
-          <a
-            href="#faq"
+            Tip
+          </Link>
+          <Link
+            href="/discount-calculator"
             className="hidden text-sm font-medium text-slate-600 transition hover:text-emerald-600 dark:text-slate-300 dark:hover:text-emerald-400 sm:inline"
           >
-            FAQ
-          </a>
+            Discount
+          </Link>
+          <Link
+            href="/about"
+            className="hidden text-sm font-medium text-slate-600 transition hover:text-emerald-600 dark:text-slate-300 dark:hover:text-emerald-400 lg:inline"
+          >
+            About
+          </Link>
           <ThemeToggle />
         </nav>
       </div>

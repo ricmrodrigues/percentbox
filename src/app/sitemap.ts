@@ -1,14 +1,36 @@
 import type { MetadataRoute } from "next";
-
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://percentbox.com";
+import { SITE_URL, TOOLS } from "@/lib/seo";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return [
+  const now = new Date();
+
+  const staticPages: MetadataRoute.Sitemap = [
     {
-      url: siteUrl,
-      lastModified: new Date(),
+      url: SITE_URL,
+      lastModified: now,
       changeFrequency: "weekly",
       priority: 1,
     },
+    {
+      url: `${SITE_URL}/about`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.5,
+    },
+    {
+      url: `${SITE_URL}/privacy`,
+      lastModified: now,
+      changeFrequency: "yearly",
+      priority: 0.3,
+    },
   ];
+
+  const toolPages: MetadataRoute.Sitemap = TOOLS.map((tool) => ({
+    url: `${SITE_URL}/${tool.slug}`,
+    lastModified: now,
+    changeFrequency: "weekly" as const,
+    priority: 0.9,
+  }));
+
+  return [...staticPages, ...toolPages];
 }

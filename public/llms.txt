@@ -1,0 +1,35 @@
+# PercentBox
+
+> Free online percentage calculator for everyday math: percent of a number, reverse percentages, increase/decrease, percentage change, tips, and discounts.
+
+Site: https://percentbox.com
+Language: en
+
+## Main pages
+
+- [Home / Percentage Calculator](https://percentbox.com/): Multi-mode free percentage calculator
+- [What is X% of Y?](https://percentbox.com/what-is-x-percent-of-y): Percentage of a number
+- [X is what % of Y?](https://percentbox.com/x-is-what-percent-of-y): Reverse percentage
+- [Percentage Increase](https://percentbox.com/percentage-increase-calculator): Raise a value by a percent
+- [Percentage Decrease](https://percentbox.com/percentage-decrease-calculator): Lower a value by a percent
+- [Percentage Change](https://percentbox.com/percentage-change-calculator): Change from A to B
+- [Tip Calculator](https://percentbox.com/tip-calculator): Tip, total, and split bill
+- [Discount Calculator](https://percentbox.com/discount-calculator): Sale price and savings
+- [About](https://percentbox.com/about): About PercentBox
+- [Privacy](https://percentbox.com/privacy): Privacy policy
+
+## Formulas
+
+- X% of Y = (X ÷ 100) × Y
+- X is what % of Y = (X ÷ Y) × 100
+- % change A→B = ((B − A) ÷ |A|) × 100
+- After increase = value × (1 + p/100)
+- After decrease = value × (1 − p/100)
+- Tip = bill × (tip% ÷ 100); total = bill + tip
+- Discount savings = price × (d% ÷ 100); final = price − savings
+
+## Notes
+
+- Fully client-side calculations; no account required
+- Sitemap: https://percentbox.com/sitemap.xml
+- Ads.txt: https://percentbox.com/ads.txt

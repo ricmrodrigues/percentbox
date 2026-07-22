@@ -133,12 +133,18 @@ function QuickButtons({
   );
 }
 
-export function Calculator() {
-  const [mode, setMode] = useState<CalculatorMode>("percent-of");
+export function Calculator({
+  initialMode = "percent-of",
+  initialDirection = "increase",
+}: {
+  initialMode?: CalculatorMode;
+  initialDirection?: "increase" | "decrease";
+} = {}) {
+  const [mode, setMode] = useState<CalculatorMode>(initialMode);
   const [a, setA] = useState("");
   const [b, setB] = useState("");
   const [direction, setDirection] = useState<"increase" | "decrease">(
-    "increase"
+    initialDirection
   );
   const [people, setPeople] = useState("1");
   const [history, setHistory] = useState<HistoryItem[]>([]);
@@ -150,6 +156,12 @@ export function Calculator() {
     setHistory(loadHistory());
     setHydrated(true);
   }, []);
+
+  // Keep mode in sync when navigating between SEO tool pages
+  useEffect(() => {
+    setMode(initialMode);
+    setDirection(initialDirection);
+  }, [initialMode, initialDirection]);
 
   // Popular examples / external presets fill the form instantly
   useEffect(() => {
