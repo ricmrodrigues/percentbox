@@ -36,6 +36,14 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "PercentBox" }],
   creator: "PercentBox",
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -44,12 +52,21 @@ export const metadata: Metadata = {
     title: "Percentage Calculator — Free Online % Calculator | PercentBox",
     description:
       "Calculate percentages instantly: X% of Y, percentage change, tips, and discounts. Clean, fast, and free.",
+    images: [
+      {
+        url: "/logo.png",
+        width: 512,
+        height: 512,
+        alt: "PercentBox logo",
+      },
+    ],
   },
   twitter: {
-    card: "summary_large_image",
+    card: "summary",
     title: "Percentage Calculator | PercentBox",
     description:
       "Free online percentage calculator — tips, discounts, increase/decrease, and more.",
+    images: ["/logo.png"],
   },
   robots: {
     index: true,
