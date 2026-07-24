@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { InstallHint } from "@/components/InstallHint";
 import { JsonLd } from "@/components/JsonLd";
 import {
   SITE_NAME,
@@ -90,8 +91,18 @@ export const metadata: Metadata = {
     },
   },
   category: "utilities",
+  // iOS home-screen / standalone web app behavior
+  appleWebApp: {
+    capable: true,
+    title: SITE_NAME,
+    statusBarStyle: "default",
+  },
+  formatDetection: {
+    telephone: false,
+  },
   other: {
     "msapplication-TileColor": "#059669",
+    "mobile-web-app-capable": "yes",
   },
 };
 
@@ -138,6 +149,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} flex min-h-full flex-col antialiased`}
       >
+        <InstallHint />
         {children}
       </body>
     </html>
