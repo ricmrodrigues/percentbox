@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { trackCalculation, trackToolView } from "@/lib/analytics";
 import {
   formatMoney,
   formatNum,
@@ -18,6 +19,11 @@ export function MarkupCalculator() {
   const [cost, setCost] = useState("50");
   const [percent, setPercent] = useState("40");
   const [sell, setSell] = useState("70");
+  const tracked = useRef("");
+
+  useEffect(() => {
+    trackToolView("markup", mode);
+  }, [mode]);
 
   const result = useMemo(() => {
     const c = parseNum(cost);
@@ -58,6 +64,17 @@ export function MarkupCalculator() {
       formula: `Margin% = profit ÷ sell × 100 · Markup% = profit ÷ cost × 100`,
     };
   }, [mode, cost, percent, sell]);
+
+  useEffect(() => {
+    if (!result || result.primary === "—") return;
+    const key = `${mode}|${cost}|${percent}|${sell}`;
+    if (key === tracked.current) return;
+    const t = window.setTimeout(() => {
+      tracked.current = key;
+      trackCalculation("markup", { tool_mode: mode });
+    }, 800);
+    return () => window.clearTimeout(t);
+  }, [result, mode, cost, percent, sell]);
 
   return (
     <CalcShell

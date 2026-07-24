@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { trackCalculation, trackToolView } from "@/lib/analytics";
 import {
   type CompoundFrequency,
   compoundInterest,
@@ -24,6 +25,11 @@ export function CompoundInterestCalculator() {
   const [years, setYears] = useState("10");
   const [contrib, setContrib] = useState("100");
   const [freq, setFreq] = useState<CompoundFrequency>("monthly");
+  const tracked = useRef("");
+
+  useEffect(() => {
+    trackToolView("compound", freq);
+  }, [freq]);
 
   const result = useMemo(() => {
     const p = parseNum(principal);
@@ -33,6 +39,17 @@ export function CompoundInterestCalculator() {
     if (p === null || r === null || y === null || p < 0 || y < 0) return null;
     return compoundInterest(p, r, y, freq, c);
   }, [principal, rate, years, contrib, freq]);
+
+  useEffect(() => {
+    if (!result) return;
+    const key = `${principal}|${rate}|${years}|${contrib}|${freq}`;
+    if (key === tracked.current) return;
+    const t = window.setTimeout(() => {
+      tracked.current = key;
+      trackCalculation("compound", { frequency: freq });
+    }, 800);
+    return () => window.clearTimeout(t);
+  }, [result, principal, rate, years, contrib, freq]);
 
   return (
     <CalcShell

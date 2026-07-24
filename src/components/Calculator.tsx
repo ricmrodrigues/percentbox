@@ -28,6 +28,11 @@ import {
   type ExamplePreset,
   LOAD_EXAMPLE_EVENT,
 } from "@/lib/examples";
+import {
+  trackCalculation,
+  trackCopyResult,
+  trackToolView,
+} from "@/lib/analytics";
 
 const MODES: CalculatorMode[] = [
   "percent-of",
@@ -163,6 +168,10 @@ export function Calculator({
     setDirection(initialDirection);
   }, [initialMode, initialDirection]);
 
+  useEffect(() => {
+    trackToolView("percentage", mode);
+  }, [mode]);
+
   // Popular examples / external presets fill the form instantly
   useEffect(() => {
     const onLoadExample = (event: Event) => {
@@ -237,6 +246,7 @@ export function Calculator({
           result: displayResult,
         })
       );
+      trackCalculation("percentage", { tool_mode: mode });
     }, 800);
 
     return () => window.clearTimeout(t);
@@ -250,6 +260,7 @@ export function Calculator({
     try {
       await navigator.clipboard.writeText(text);
       setCopied(true);
+      trackCopyResult(`percentage:${mode}`);
       setTimeout(() => setCopied(false), 1800);
     } catch {
       // fallback
@@ -260,9 +271,10 @@ export function Calculator({
       document.execCommand("copy");
       document.body.removeChild(ta);
       setCopied(true);
+      trackCopyResult(`percentage:${mode}`);
       setTimeout(() => setCopied(false), 1800);
     }
-  }, [result]);
+  }, [result, mode]);
 
   const clearAll = () => {
     setA("");

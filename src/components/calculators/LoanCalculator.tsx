@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { trackCalculation, trackToolView } from "@/lib/analytics";
 import {
   formatMoney,
   formatNum,
@@ -14,6 +15,11 @@ export function LoanCalculator() {
   const [rate, setRate] = useState("6.5");
   const [years, setYears] = useState("5");
   const [showTable, setShowTable] = useState(false);
+  const tracked = useRef("");
+
+  useEffect(() => {
+    trackToolView("loan");
+  }, []);
 
   const result = useMemo(() => {
     const p = parseNum(principal);
@@ -24,6 +30,17 @@ export function LoanCalculator() {
     }
     return loanAmortization(p, r, y, 12);
   }, [principal, rate, years]);
+
+  useEffect(() => {
+    if (!result) return;
+    const key = `${principal}|${rate}|${years}`;
+    if (key === tracked.current) return;
+    const t = window.setTimeout(() => {
+      tracked.current = key;
+      trackCalculation("loan");
+    }, 800);
+    return () => window.clearTimeout(t);
+  }, [result, principal, rate, years]);
 
   const previewRows = result
     ? showTable

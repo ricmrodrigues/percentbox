@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useId, useRef, useState } from "react";
+import { trackEvent } from "@/lib/analytics";
 import { TOOLS } from "@/lib/seo";
 
 /** Short labels for compact nav chips (optional row on xl screens) */
@@ -89,7 +90,10 @@ export function ToolsNav() {
                 <Link
                   role="menuitem"
                   href={`/${tool.slug}`}
-                  onClick={() => setOpen(false)}
+                  onClick={() => {
+                    trackEvent("nav_tool_click", { tool_slug: tool.slug });
+                    setOpen(false);
+                  }}
                   className="block px-4 py-2.5 text-left transition hover:bg-emerald-50 dark:hover:bg-emerald-950/40"
                 >
                   <span className="block text-sm font-semibold text-slate-900 dark:text-white">

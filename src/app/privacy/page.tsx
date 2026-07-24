@@ -49,7 +49,7 @@ export default function PrivacyPage() {
             Privacy Policy
           </h1>
           <p className="mt-2 text-sm text-slate-500">
-            Last updated: July 22, 2026
+            Last updated: July 24, 2026
           </p>
 
           <div className="mt-8 space-y-6 text-slate-600 dark:text-slate-400">
@@ -126,10 +126,18 @@ export default function PrivacyPage() {
                 Analytics and logs
               </h2>
               <p className="mt-2 leading-relaxed">
-                Hosting providers (such as Vercel) may collect standard server
-                logs (IP address, user agent, timestamps) for security and
-                reliability. If we add analytics tools later, this policy will be
-                updated to name them.
+                We use <strong>Google Analytics 4</strong> to understand how the
+                site is used (pages visited, traffic sources, device types, and
+                aggregate interaction events such as calculator usage). Google
+                may process data according to its own privacy policies. IP
+                anonymization is enabled where supported. You can opt out with
+                browser extensions such as Google Analytics Opt-out, or by
+                blocking analytics cookies.
+              </p>
+              <p className="mt-2 leading-relaxed">
+                Hosting providers (such as Vercel) may also collect standard
+                server logs (IP address, user agent, timestamps) for security
+                and reliability.
               </p>
             </section>
 

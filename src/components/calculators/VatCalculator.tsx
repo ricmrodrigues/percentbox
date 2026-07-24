@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { trackCalculation, trackToolView } from "@/lib/analytics";
 import {
   VAT_PRESETS,
   formatMoney,
@@ -15,6 +16,11 @@ export function VatCalculator() {
   const [amount, setAmount] = useState("100");
   const [rate, setRate] = useState("23");
   const [mode, setMode] = useState<VatMode>("add");
+  const tracked = useRef("");
+
+  useEffect(() => {
+    trackToolView("vat", mode);
+  }, [mode]);
 
   const result = useMemo(() => {
     const a = parseNum(amount);
@@ -22,6 +28,17 @@ export function VatCalculator() {
     if (a === null || r === null || r < 0) return null;
     return vatCalc(a, r, mode);
   }, [amount, rate, mode]);
+
+  useEffect(() => {
+    if (!result) return;
+    const key = `${mode}|${amount}|${rate}`;
+    if (key === tracked.current) return;
+    const t = window.setTimeout(() => {
+      tracked.current = key;
+      trackCalculation("vat", { tool_mode: mode });
+    }, 800);
+    return () => window.clearTimeout(t);
+  }, [result, mode, amount, rate]);
 
   return (
     <CalcShell
