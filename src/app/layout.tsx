@@ -157,11 +157,12 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+        {/* Plain script — next/script adds data-nscript which AdSense rejects */}
+        <GoogleAdsense />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} flex min-h-full flex-col antialiased`}
       >
-        <GoogleAdsense />
         <GoogleAnalytics />
         <InstallHint />
         {children}
