@@ -99,12 +99,35 @@ export function Footer() {
               <li>100% free · No login</li>
               <li>Privacy-friendly · local history</li>
             </ul>
+            <div className="mt-5">
+              <p className="text-sm font-semibold text-slate-900 dark:text-white">
+                Sister project
+              </p>
+              <a
+                href="https://portugalnetpay.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-2 block text-sm font-medium text-emerald-700 hover:underline dark:text-emerald-400"
+              >
+                Portugal Net Pay — salary &amp; tax calculators (EN/PT)
+              </a>
+            </div>
           </div>
         </div>
 
         <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-slate-100 pt-6 text-xs text-slate-400 dark:border-slate-800 dark:text-slate-500 sm:flex-row">
           <p>© {year} PercentBox. All rights reserved.</p>
-          <p>Built for speed · Mobile-first · SEO optimized</p>
+          <p>
+            Sister site:{" "}
+            <a
+              href="https://portugalnetpay.com"
+              className="text-emerald-600 hover:underline dark:text-emerald-400"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Portugal Net Pay
+            </a>
+          </p>
         </div>
       </div>
     </footer>
