@@ -1,8 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { GoogleAdsense } from "@/components/GoogleAdsense";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { InstallHint } from "@/components/InstallHint";
 import { JsonLd } from "@/components/JsonLd";
+import { ADSENSE_CLIENT } from "@/lib/adsense";
 import {
   SITE_NAME,
   SITE_TAGLINE,
@@ -109,6 +111,8 @@ export const metadata: Metadata = {
   other: {
     "msapplication-TileColor": "#059669",
     "mobile-web-app-capable": "yes",
+    // Helps AdSense associate the site with your publisher account
+    "google-adsense-account": ADSENSE_CLIENT,
   },
 };
 
@@ -157,6 +161,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} flex min-h-full flex-col antialiased`}
       >
+        <GoogleAdsense />
         <GoogleAnalytics />
         <InstallHint />
         {children}
