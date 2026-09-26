@@ -31,8 +31,14 @@ export function Header() {
         >
           <ToolsNav />
           <Link
+            href="/guides"
+            className="text-sm font-medium text-slate-600 transition hover:text-emerald-600 dark:text-slate-300 dark:hover:text-emerald-400"
+          >
+            Guides
+          </Link>
+          <Link
             href="/about"
-            className="hidden text-sm font-medium text-slate-600 transition hover:text-emerald-600 dark:text-slate-300 dark:hover:text-emerald-400 md:inline"
+            className="hidden text-sm font-medium text-slate-600 transition hover:text-emerald-600 dark:text-slate-300 dark:hover:text-emerald-400 sm:inline"
           >
             About
           </Link>

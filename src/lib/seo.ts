@@ -6,6 +6,12 @@ export const SITE_URL =
 
 export const SITE_NAME = "PercentBox";
 
+export const CONTACT_EMAIL = "hello@percentbox.com";
+
+export const PUBLISHER_NAME = "Ricardo Rodrigues";
+
+export const PUBLISHER_COUNTRY = "Portugal";
+
 export const SITE_TAGLINE =
   "Free online calculators — percentage, VAT, markup, compound interest & loans";
 
@@ -529,7 +535,23 @@ export function organizationJsonLd() {
       width: 512,
       height: 512,
     },
-    sameAs: [] as string[],
+    email: CONTACT_EMAIL,
+    founder: {
+      "@type": "Person",
+      name: PUBLISHER_NAME,
+      address: {
+        "@type": "PostalAddress",
+        addressCountry: "PT",
+      },
+    },
+    contactPoint: {
+      "@type": "ContactPoint",
+      email: CONTACT_EMAIL,
+      contactType: "customer support",
+      url: `${SITE_URL}/contact`,
+      availableLanguage: ["English"],
+    },
+    sameAs: ["https://portugalnetpay.com"],
   };
 }
 

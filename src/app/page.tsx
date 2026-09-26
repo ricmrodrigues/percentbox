@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { AdSlot } from "@/components/AdSlot";
 import { Calculator } from "@/components/Calculator";
 import { Footer } from "@/components/Footer";
@@ -6,6 +7,7 @@ import { Header } from "@/components/Header";
 import { JsonLd } from "@/components/JsonLd";
 import { PopularCalculations } from "@/components/PopularCalculations";
 import { HOME_FAQS, SeoContent } from "@/components/SeoContent";
+import { GUIDES, guideReadingMinutes } from "@/content/guides";
 import {
   SITE_URL,
   breadcrumbJsonLd,
@@ -78,34 +80,41 @@ export default function Home() {
               fast, and built for mobile.
             </p>
             <p className="mx-auto mt-3 max-w-xl text-sm text-slate-500 dark:text-slate-500">
-              Also try{" "}
-              <a
+              Read the{" "}
+              <Link
+                href="/guides"
+                className="font-medium text-emerald-700 underline-offset-2 hover:underline dark:text-emerald-400"
+              >
+                guides
+              </Link>{" "}
+              when you want the method, not only the number. Also try{" "}
+              <Link
                 href="/loan-calculator"
                 className="font-medium text-emerald-700 underline-offset-2 hover:underline dark:text-emerald-400"
               >
                 loan / EMI
-              </a>
+              </Link>
               ,{" "}
-              <a
+              <Link
                 href="/vat-calculator"
                 className="font-medium text-emerald-700 underline-offset-2 hover:underline dark:text-emerald-400"
               >
                 VAT
-              </a>
+              </Link>
               ,{" "}
-              <a
+              <Link
                 href="/markup-calculator"
                 className="font-medium text-emerald-700 underline-offset-2 hover:underline dark:text-emerald-400"
               >
                 markup &amp; margin
-              </a>
+              </Link>
               , and{" "}
-              <a
+              <Link
                 href="/compound-interest-calculator"
                 className="font-medium text-emerald-700 underline-offset-2 hover:underline dark:text-emerald-400"
               >
                 compound interest
-              </a>
+              </Link>
               .
             </p>
           </div>
@@ -168,12 +177,12 @@ export default function Home() {
                     ["Percentage change", "/percentage-change-calculator"],
                   ].map(([label, href]) => (
                     <li key={href}>
-                      <a
+                      <Link
                         href={href}
                         className="font-medium text-emerald-700 underline-offset-2 hover:underline dark:text-emerald-400"
                       >
                         {label}
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -182,6 +191,47 @@ export default function Home() {
           </div>
 
           <AdSlot slot="inline" className="my-10" />
+
+          <section aria-labelledby="guides-home" className="mb-12">
+            <h2
+              id="guides-home"
+              className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white"
+            >
+              Guides that explain the formula
+            </h2>
+            <p className="mt-2 max-w-3xl text-sm text-slate-500 dark:text-slate-400">
+              Original articles by Ricardo Rodrigues — longer than a caption
+              under the calculator, shorter than a textbook.
+            </p>
+            <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+              {GUIDES.slice(0, 6).map((guide) => (
+                <li key={guide.slug}>
+                  <Link
+                    href={`/guides/${guide.slug}`}
+                    className="block h-full rounded-xl border border-slate-200 bg-white p-4 transition hover:border-emerald-300 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-emerald-800"
+                  >
+                    <span className="font-semibold text-emerald-700 dark:text-emerald-400">
+                      {guide.title}
+                    </span>
+                    <span className="mt-1 block text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+                      {guide.description}
+                    </span>
+                    <span className="mt-2 block text-xs text-slate-400">
+                      {guideReadingMinutes(guide)} min read
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-4">
+              <Link
+                href="/guides"
+                className="text-sm font-medium text-emerald-700 underline dark:text-emerald-400"
+              >
+                All guides
+              </Link>
+            </p>
+          </section>
 
           <SeoContent />
         </div>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CookieSettingsButton } from "@/components/ConsentBanner";
 import { TOOLS } from "@/lib/seo";
 
 export function Footer() {
@@ -74,10 +75,26 @@ export function Footer() {
             <ul className="mt-3 space-y-2 text-sm text-slate-500 dark:text-slate-400">
               <li>
                 <Link
+                  href="/guides"
+                  className="hover:text-emerald-600 dark:hover:text-emerald-400"
+                >
+                  Guides
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/about"
                   className="hover:text-emerald-600 dark:hover:text-emerald-400"
                 >
                   About
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/contact"
+                  className="hover:text-emerald-600 dark:hover:text-emerald-400"
+                >
+                  Contact
                 </Link>
               </li>
               <li>
@@ -87,6 +104,17 @@ export function Footer() {
                 >
                   Privacy Policy
                 </Link>
+              </li>
+              <li>
+                <Link
+                  href="/terms"
+                  className="hover:text-emerald-600 dark:hover:text-emerald-400"
+                >
+                  Terms of use
+                </Link>
+              </li>
+              <li>
+                <CookieSettingsButton className="hover:text-emerald-600 dark:hover:text-emerald-400" />
               </li>
               <li>
                 <a

@@ -1,13 +1,8 @@
 "use client";
 
 import { usePathname, useSearchParams } from "next/navigation";
-import Script from "next/script";
 import { Suspense, useEffect } from "react";
-import {
-  GA_MEASUREMENT_ID,
-  isGaEnabled,
-  trackPageView,
-} from "@/lib/analytics";
+import { isGaEnabled, trackPageView } from "@/lib/analytics";
 
 function GaRouteListener() {
   const pathname = usePathname();
@@ -24,34 +19,16 @@ function GaRouteListener() {
 }
 
 /**
- * GA4 base tags + App Router page views.
+ * App Router page views. The gtag library itself is injected by the consent
+ * bootstrap in the root layout (only when non-essential scripts are allowed).
  * No-ops when NEXT_PUBLIC_GA_MEASUREMENT_ID is unset.
  */
 export function GoogleAnalytics() {
   if (!isGaEnabled) return null;
 
   return (
-    <>
-      <Script
-        src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-        strategy="afterInteractive"
-      />
-      <Script id="ga4-init" strategy="afterInteractive">
-        {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          window.gtag = gtag;
-          gtag('js', new Date());
-          gtag('config', '${GA_MEASUREMENT_ID}', {
-            send_page_view: false,
-            anonymize_ip: true,
-            cookie_flags: 'SameSite=None;Secure'
-          });
-        `}
-      </Script>
-      <Suspense fallback={null}>
-        <GaRouteListener />
-      </Suspense>
-    </>
+    <Suspense fallback={null}>
+      <GaRouteListener />
+    </Suspense>
   );
 }

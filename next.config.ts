@@ -44,6 +44,19 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      // www → apex. Permanent is HTTP 308 in Next.js. Keeps the apex canonical.
+      {
+        source: "/",
+        has: [{ type: "host", value: "www.percentbox.com" }],
+        destination: "https://percentbox.com",
+        permanent: true,
+      },
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "www.percentbox.com" }],
+        destination: "https://percentbox.com/:path*",
+        permanent: true,
+      },
       // Common alternate spellings / legacy paths → canonical tool pages
       {
         source: "/percent-calculator",

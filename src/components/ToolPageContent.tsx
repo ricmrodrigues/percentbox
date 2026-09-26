@@ -1,9 +1,12 @@
+import Link from "next/link";
 import { Calculator } from "@/components/Calculator";
 import { CompoundInterestCalculator } from "@/components/calculators/CompoundInterestCalculator";
 import { LoanCalculator } from "@/components/calculators/LoanCalculator";
 import { MarkupCalculator } from "@/components/calculators/MarkupCalculator";
 import { VatCalculator } from "@/components/calculators/VatCalculator";
 import { RelatedTools } from "@/components/RelatedTools";
+import { getGuide } from "@/content/guides";
+import { getToolEditorial } from "@/lib/tool-editorial";
 import type { ToolPage } from "@/lib/seo";
 
 function ToolCalculator({ tool }: { tool: ToolPage }) {
@@ -33,6 +36,10 @@ function ToolCalculator({ tool }: { tool: ToolPage }) {
 }
 
 export function ToolPageContent({ tool }: { tool: ToolPage }) {
+  const editorial = getToolEditorial(tool.slug);
+  const guide = editorial ? getGuide(editorial.guideSlug) : undefined;
+  const faqs = [...tool.faqs, ...(editorial?.faqs ?? [])];
+
   return (
     <div className="space-y-10">
       <div id="calculator" className="scroll-mt-20">
@@ -46,10 +53,41 @@ export function ToolPageContent({ tool }: { tool: ToolPage }) {
         >
           About this {tool.shortTitle.toLowerCase()}
         </h2>
-        <p className="mt-3 max-w-3xl leading-relaxed text-slate-600 dark:text-slate-400">
-          {tool.intro}
-        </p>
+        <div className="mt-3 max-w-3xl space-y-3 leading-relaxed text-slate-600 dark:text-slate-400">
+          <p>{tool.intro}</p>
+          {editorial?.paragraphs.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+          {guide && (
+            <p>
+              Longer explanation:{" "}
+              <Link
+                href={`/guides/${guide.slug}`}
+                className="font-medium text-emerald-700 underline dark:text-emerald-400"
+              >
+                {guide.title}
+              </Link>
+              .
+            </p>
+          )}
+        </div>
       </section>
+
+      {editorial && (
+        <section aria-labelledby="when-to-use">
+          <h2
+            id="when-to-use"
+            className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white"
+          >
+            When to use this calculator
+          </h2>
+          <ul className="mt-3 max-w-3xl list-disc space-y-2 pl-5 text-slate-600 dark:text-slate-400">
+            {editorial.whenToUse.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       <section aria-labelledby="examples-heading">
         <h2
@@ -126,6 +164,32 @@ export function ToolPageContent({ tool }: { tool: ToolPage }) {
         </section>
       )}
 
+      {editorial && editorial.pitfalls.length > 0 && (
+        <section aria-labelledby="pitfalls-heading">
+          <h2
+            id="pitfalls-heading"
+            className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white"
+          >
+            Mistakes this page will not catch for you
+          </h2>
+          <div className="mt-4 space-y-4">
+            {editorial.pitfalls.map((pitfall) => (
+              <div
+                key={pitfall.title}
+                className="rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900"
+              >
+                <h3 className="font-semibold text-slate-900 dark:text-white">
+                  {pitfall.title}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                  {pitfall.detail}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
       <section aria-labelledby="tool-faq-heading">
         <h2
           id="tool-faq-heading"
@@ -134,7 +198,7 @@ export function ToolPageContent({ tool }: { tool: ToolPage }) {
           FAQ
         </h2>
         <dl className="mt-5 space-y-4">
-          {tool.faqs.map((item) => (
+          {faqs.map((item) => (
             <div
               key={item.q}
               className="rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900"

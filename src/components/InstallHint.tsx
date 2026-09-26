@@ -36,6 +36,7 @@ export function InstallHint() {
       // ignore
     }
     if (isIos() && !isStandalone()) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- iOS standalone check is client-only
       setVisible(true);
     }
   }, []);

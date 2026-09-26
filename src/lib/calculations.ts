@@ -120,7 +120,7 @@ export function tipCalc(
     label: `${formatNumber(tipPercent)}% tip on $${formatCurrency(bill)}`,
     detail:
       people > 1
-        ? `Tip: $${formatCurrency(tip)} · Total: $${formatCurrency(total)} · Per person: $${formatCurrency(perPerson)}`
+        ? `Tip: $${formatCurrency(tip)} · Total: $${formatCurrency(total)} · Per person: $${formatCurrency(perPerson)} (tip $${formatCurrency(tipPerPerson)} each)`
         : `Tip: $${formatCurrency(tip)} · Total: $${formatCurrency(total)}`,
     formula: `Tip $${formatCurrency(tip)} + Bill $${formatCurrency(bill)} = $${formatCurrency(total)}${people > 1 ? ` ÷ ${people} = $${formatCurrency(perPerson)}/person` : ""}`,
   };
