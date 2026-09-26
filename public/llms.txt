@@ -19,8 +19,11 @@ Language: en
 - [VAT Calculator](https://percentbox.com/vat-calculator): Add or extract sales tax / VAT
 - [Compound Interest](https://percentbox.com/compound-interest-calculator): Growth with contributions
 - [Loan / EMI](https://percentbox.com/loan-calculator): Fixed-rate payment + amortization
-- [About](https://percentbox.com/about): About PercentBox
-- [Privacy](https://percentbox.com/privacy): Privacy policy
+- [Guides](https://percentbox.com/guides): Original explainers on percentages, VAT, loans, and pricing
+- [About](https://percentbox.com/about): Publisher, editorial standards, sister site
+- [Contact](https://percentbox.com/contact): hello@percentbox.com
+- [Privacy](https://percentbox.com/privacy): Privacy policy, consent banner, AdSense and GA4
+- [Terms](https://percentbox.com/terms): Terms of use
 
 ## Formulas
 

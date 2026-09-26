@@ -1,13 +1,25 @@
 /** Google AdSense publisher config */
-export const ADSENSE_CLIENT =
-  process.env.NEXT_PUBLIC_ADSENSE_CLIENT?.trim() ||
-  "ca-pub-5355338650267313";
 
-export const isAdsenseEnabled = Boolean(ADSENSE_CLIENT);
+const DEFAULT_CLIENT = "ca-pub-5355338650267313";
+
+export const ADSENSE_CLIENT =
+  process.env.NEXT_PUBLIC_ADSENSE_CLIENT?.trim() || DEFAULT_CLIENT;
+
+/**
+ * The review script loads whenever a publisher ID is configured.
+ * Set NEXT_PUBLIC_ADSENSE_ENABLED=false to turn it off.
+ * Unset (the production default today) or "true" both enable Auto ads code.
+ * Manual units still require slot IDs — empty slots do not block the script.
+ */
+export const isAdsenseExplicitlyDisabled =
+  process.env.NEXT_PUBLIC_ADSENSE_ENABLED?.trim().toLowerCase() === "false";
+
+export const isAdsenseEnabled =
+  Boolean(ADSENSE_CLIENT) && !isAdsenseExplicitlyDisabled;
 
 /**
  * Optional per-placement unit IDs from AdSense → Ads → By ad unit.
- * If empty, Auto ads (script only) still works when enabled in AdSense.
+ * If empty, Auto ads (script + client only) still works when enabled in AdSense.
  */
 export type AdPlacement = "top" | "sidebar" | "below" | "inline";
 

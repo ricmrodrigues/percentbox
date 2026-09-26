@@ -158,12 +158,16 @@ export function Calculator({
   const lastSavedKey = useRef("");
 
   useEffect(() => {
+    // localStorage is only available after mount; the server render has no history.
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- hydrate client-only history
     setHistory(loadHistory());
     setHydrated(true);
   }, []);
 
   // Keep mode in sync when navigating between SEO tool pages
   useEffect(() => {
+    // SEO routes pass a new initial mode when the user navigates between tools.
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- sync props from the route
     setMode(initialMode);
     setDirection(initialDirection);
   }, [initialMode, initialDirection]);

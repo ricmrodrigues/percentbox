@@ -1,10 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { GoogleAdsense } from "@/components/GoogleAdsense";
+import { ConsentBanner } from "@/components/ConsentBanner";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { InstallHint } from "@/components/InstallHint";
 import { JsonLd } from "@/components/JsonLd";
 import { ADSENSE_CLIENT } from "@/lib/adsense";
+import { consentBootstrapScript } from "@/lib/consent";
 import {
   SITE_NAME,
   SITE_TAGLINE,
@@ -50,8 +51,8 @@ export const metadata: Metadata = {
     "x is what percent of y",
     "percent off calculator",
   ],
-  authors: [{ name: SITE_NAME, url: SITE_URL }],
-  creator: SITE_NAME,
+  authors: [{ name: "Ricardo Rodrigues", url: `${SITE_URL}/about` }],
+  creator: "Ricardo Rodrigues",
   publisher: SITE_NAME,
   icons: {
     // Google Search: square, multiple of 48px. Prefer crisp PNG over ICO.
@@ -157,8 +158,10 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
-        {/* Plain script — next/script adds data-nscript which AdSense rejects */}
-        <GoogleAdsense />
+        <script
+          id="percentbox-consent"
+          dangerouslySetInnerHTML={{ __html: consentBootstrapScript() }}
+        />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} flex min-h-full flex-col antialiased`}
@@ -166,6 +169,7 @@ export default function RootLayout({
         <GoogleAnalytics />
         <InstallHint />
         {children}
+        <ConsentBanner />
       </body>
     </html>
   );

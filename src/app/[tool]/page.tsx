@@ -6,6 +6,7 @@ import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { JsonLd } from "@/components/JsonLd";
 import { ToolPageContent } from "@/components/ToolPageContent";
+import { getToolEditorial } from "@/lib/tool-editorial";
 import {
   TOOLS,
   absoluteUrl,
@@ -82,7 +83,10 @@ export default async function ToolRoutePage({ params }: Props) {
       websiteJsonLd(),
       softwareAppJsonLd(tool),
       howToJsonLd(tool),
-      faqJsonLd(tool.faqs),
+      faqJsonLd([
+        ...tool.faqs,
+        ...(getToolEditorial(tool.slug)?.faqs ?? []),
+      ]),
       breadcrumbJsonLd([
         { name: "Home", path: "/" },
         { name: tool.shortTitle, path: `/${tool.slug}` },

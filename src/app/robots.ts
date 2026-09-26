@@ -21,6 +21,10 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: "Bingbot",
         allow: "/",
       },
+      {
+        userAgent: "Mediapartners-Google",
+        allow: "/",
+      },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,
     host: SITE_URL,

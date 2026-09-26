@@ -49,18 +49,33 @@ Or use the CLI:
 npx vercel
 ```
 
-## AdSense setup
+## Environment variables
 
-1. Apply at [Google AdSense](https://www.google.com/adsense)
-2. Add the AdSense script to `src/app/layout.tsx` once approved
-3. Replace placeholders in `src/components/AdSlot.tsx` with real `<ins class="adsbygoogle">` units
+Copy `.env.example` to `.env.local` for local development. On Vercel, set the same names in Project Settings → Environment Variables. Do not commit real `.env` files.
 
-Ad placements are ready:
+| Variable | Required | Purpose |
+| --- | --- | --- |
+| `NEXT_PUBLIC_SITE_URL` | Recommended | Canonical origin, default `https://percentbox.com` |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | Optional | GA4 id (`G-…`). If empty, analytics is not loaded |
+| `NEXT_PUBLIC_ADSENSE_CLIENT` | Optional | Publisher id. Defaults to `ca-pub-5355338650267313` |
+| `NEXT_PUBLIC_ADSENSE_ENABLED` | Optional | Leave **unset** or `true` to load the Auto ads script. Set `false` to disable it. You do **not** need this flag for AdSense review |
+| `NEXT_PUBLIC_ADSENSE_SLOT_TOP` | Optional | Manual unit id. Empty means no top unit |
+| `NEXT_PUBLIC_ADSENSE_SLOT_SIDEBAR` | Optional | Manual unit id |
+| `NEXT_PUBLIC_ADSENSE_SLOT_BELOW` | Optional | Manual unit id |
+| `NEXT_PUBLIC_ADSENSE_SLOT_INLINE` | Optional | Manual unit id |
 
-- Top banner (below hero)
-- Sidebar (desktop)
-- Below calculator
-- In-between content
+The AdSense script (`adsbygoogle.js?client=…`) loads site-wide whenever a publisher id is present and the kill switch is not `false`, including when every slot variable is empty. That is the Auto ads path used for review. Manual `<ins class="adsbygoogle">` units render only for slots that have an id, and only after the visitor has allowed non-essential scripts.
+
+`www.percentbox.com` 308-redirects to `https://percentbox.com` via `next.config.ts`.
+
+## AdSense notes
+
+- `ads.txt` is served from `src/app/ads.txt/route.ts` for `pub-5355338650267313`.
+- `robots.txt` allows `Mediapartners-Google`.
+- The tag is a plain script element. `next/script` adds `data-nscript`, which AdSense rejects.
+- A first-party banner gates GA and AdSense. EEA/UK-looking browsers (timezone or language region) do not load those scripts until Accept. Other browsers load them unless the visitor previously chose Reject.
+- Turn on Auto ads in the AdSense account if you want Google to place units. This repo does not invent slot ids.
+- Nothing in the site claims the AdSense application is approved.
 
 ## Project structure
 
