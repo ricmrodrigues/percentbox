@@ -1,4 +1,17 @@
-export interface ToolEditorial {
+import { TOOL_DEPTH } from "@/content/tools";
+import { TOOLS } from "@/lib/seo";
+
+export interface ToolFieldNote {
+  name: string;
+  detail: string;
+}
+
+export interface ToolWalkthrough {
+  title: string;
+  paragraphs: string[];
+}
+
+interface ToolEditorialBase {
   guideSlug: string;
   /** Extra paragraphs under the short intro. */
   paragraphs: string[];
@@ -7,7 +20,15 @@ export interface ToolEditorial {
   faqs: { q: string; a: string }[];
 }
 
-export const TOOL_EDITORIAL: Record<string, ToolEditorial> = {
+export interface ToolEditorial extends ToolEditorialBase {
+  relatedGuides: string[];
+  audience: string[];
+  fields: ToolFieldNote[];
+  formulaNotes: string[];
+  walkthroughs: ToolWalkthrough[];
+}
+
+export const TOOL_EDITORIAL: Record<string, ToolEditorialBase> = {
   "percentage-calculator": {
     guideSlug: "how-to-calculate-percentages",
     paragraphs: [
@@ -418,6 +439,66 @@ export const TOOL_EDITORIAL: Record<string, ToolEditorial> = {
   },
 };
 
+const EMPTY_DEPTH = {
+  relatedGuides: [] as string[],
+  audience: [] as string[],
+  fields: [] as ToolEditorial["fields"],
+  formulaNotes: [] as string[],
+  walkthroughs: [] as ToolEditorial["walkthroughs"],
+};
+
 export function getToolEditorial(slug: string): ToolEditorial | undefined {
-  return TOOL_EDITORIAL[slug];
+  const base = TOOL_EDITORIAL[slug];
+  if (!base) return undefined;
+  const depth = TOOL_DEPTH[slug];
+  if (!depth) {
+    return { ...EMPTY_DEPTH, ...base, relatedGuides: [] };
+  }
+  return {
+    ...base,
+    relatedGuides: depth.relatedGuides,
+    audience: depth.audience,
+    fields: depth.fields,
+    formulaNotes: depth.formulaNotes,
+    walkthroughs: depth.walkthroughs,
+    pitfalls: [...base.pitfalls, ...depth.extraPitfalls],
+    faqs: [...base.faqs, ...depth.extraFaqs],
+  };
+}
+
+function countWords(text: string): number {
+  return text.trim().split(/\s+/).filter(Boolean).length;
+}
+
+/** Crawlable prose on a tool URL, excluding header, footer, and related-tool blurbs. */
+export function toolPageWordCount(slug: string): number {
+  const tool = TOOLS.find((item) => item.slug === slug);
+  const editorial = getToolEditorial(slug);
+  if (!tool || !editorial) return 0;
+  const parts = [
+    tool.h1,
+    tool.intro,
+    ...tool.examples.flatMap((example) => [example.q, example.a]),
+    ...tool.faqs.flatMap((faq) => [faq.q, faq.a]),
+    ...tool.formulas.flatMap((formula) => [formula.goal, formula.formula]),
+    ...editorial.paragraphs,
+    ...editorial.audience,
+    ...editorial.fields.flatMap((field) => [field.name, field.detail]),
+    ...editorial.formulaNotes,
+    ...editorial.walkthroughs.flatMap((walk) => [walk.title, ...walk.paragraphs]),
+    ...editorial.whenToUse,
+    ...editorial.pitfalls.flatMap((pitfall) => [pitfall.title, pitfall.detail]),
+    ...editorial.faqs.flatMap((faq) => [faq.q, faq.a]),
+  ];
+  return countWords(parts.join(" "));
+}
+
+const MIN_TOOL_WORDS = 1000;
+for (const tool of TOOLS) {
+  const count = toolPageWordCount(tool.slug);
+  if (count < MIN_TOOL_WORDS) {
+    throw new Error(
+      `${tool.slug} has ${count} crawlable words; need at least ${MIN_TOOL_WORDS}.`,
+    );
+  }
 }

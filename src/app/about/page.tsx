@@ -37,7 +37,7 @@ export default function AboutPage() {
         name: "About PercentBox",
         url: absoluteUrl("/about"),
         isPartOf: { "@id": `${SITE_URL}/#website` },
-        dateModified: "2026-09-26",
+        dateModified: "2026-09-27",
         author: {
           "@type": "Person",
           name: PUBLISHER_NAME,
@@ -63,7 +63,7 @@ export default function AboutPage() {
             About PercentBox
           </h1>
           <p className="mt-2 text-sm text-slate-500">
-            Updated September 26, 2026 · Published by {PUBLISHER_NAME}
+            Updated September 27, 2026 · Published by {PUBLISHER_NAME}
           </p>
           <div className="mt-6 space-y-4 text-slate-600 dark:text-slate-400">
             <p>
@@ -143,14 +143,33 @@ export default function AboutPage() {
             </h2>
             <p>
               Guides are original explanations with worked numbers, not copied
-              textbook chapters and not AI-shaped filler around a keyword. When
+              textbook chapters and not filler wrapped around a keyword. When
               a result depends on a local rule — a VAT rate, a tipping custom, a
               lender’s fee — the article says so and points you to an official
               source or the contract rather than inventing a universal answer.
             </p>
+            <h2 className="pt-4 text-xl font-bold text-slate-900 dark:text-white">
+              How a calculator page is checked
+            </h2>
             <p>
-              Examples use round money so you can redo them by hand. Where a
-              figure is rounded to the cent, the article says it is rounded.
+              Each tool page states who the formula is for, what every field
+              means, the operation the page actually runs, at least one
+              worked example with the inputs written out, the mistakes that
+              produce a confident wrong number, and a short FAQ. The formula
+              line in the calculator is the same operation as the prose. If
+              they disagree, the page is wrong and should be corrected.
+            </p>
+            <p>
+              Worked examples use amounts you can redo by hand. Where a figure
+              is rounded to the cent, the page says it is rounded. VAT presets
+              are memory aids for commonly cited rates, not a decision about
+              which rate a supply takes. Percent change is kept separate from
+              percentage points. A loan schedule is not a compound-interest
+              projection, and a markup is not a margin. An updated date means
+              the prose was reviewed. It does not mean a tax authority changed
+              a rate that day.
+            </p>
+            <p>
               Tools and articles are educational estimates. They are not tax,
               legal, investment, or credit advice.
             </p>
@@ -180,8 +199,9 @@ export default function AboutPage() {
               The site may show ads through Google AdSense so the tools can stay
               free, and it may use Google Analytics 4 to see which pages are
               actually used. A first-party banner lets you accept or reject
-              those non-essential scripts. Visitors whose browser looks like the
-              EEA or the UK do not get those scripts until they accept. Details,
+              those non-essential scripts.               Visitors whose browser looks like the
+              EEA, the UK, or Switzerland do not get those scripts until they
+              accept. Details,
               including what this banner is not, are in the{" "}
               <Link
                 href="/privacy"

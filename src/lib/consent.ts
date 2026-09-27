@@ -4,7 +4,11 @@ import { GA_MEASUREMENT_ID, isGaEnabled } from "@/lib/analytics";
 export const CONSENT_COOKIE = "pb_consent";
 export const CONSENT_MAX_AGE_SECONDS = 60 * 60 * 24 * 180;
 
-/** EEA member states plus the UK. Used as a language-region hint, not a geo IP lookup. */
+/**
+ * EEA member states, the UK, and Switzerland.
+ * Used as a language-region hint, not a geo IP lookup.
+ * Switzerland is included because Google's EU user-consent policy covers it.
+ */
 export const EEA_UK_REGIONS = [
   "AT",
   "BE",
@@ -38,6 +42,7 @@ export const EEA_UK_REGIONS = [
   "NO",
   "GB",
   "UK",
+  "CH",
 ] as const;
 
 export type ConsentChoice = "accepted" | "rejected";
@@ -63,9 +68,12 @@ function safeToken(value: string): string {
  * Inline head bootstrap. Runs before hydration so AdSense and GA are present
  * after JavaScript execution for visitors who are allowed to receive them.
  *
- * EEA/UK (timezone or language region) defaults to denied until Accept.
+ * EEA/UK/Switzerland (timezone or language region) defaults to denied until Accept.
  * Everyone else loads the scripts unless they previously chose Reject.
  * A stored Reject never loads the scripts.
+ * Google's ad crawlers (not people, and not a stored consent choice) receive
+ * adsbygoogle.js even when the region heuristic would withhold it, so review
+ * can see the ad tag. Analytics stays off for those user agents.
  *
  * next/script is intentionally not used for adsbygoogle.js: it adds
  * data-nscript, which AdSense rejects on the head tag.
@@ -85,6 +93,12 @@ export function consentBootstrapScript(): string {
       var m=document.cookie.match(new RegExp("(?:^|; )"+COOKIE+"=(accepted|rejected)(?:;|$)"));
       return m?m[1]:null;
     } catch(e){ return null; }
+  }
+  function isAdsCrawler(){
+    var ua=navigator.userAgent||"";
+    return ua.indexOf("Mediapartners-Google")!==-1
+      || ua.indexOf("Google-Display-Ads-Bot")!==-1
+      || ua.indexOf("AdsBot-Google")!==-1;
   }
   function isEea(){
     var tz="";
@@ -120,19 +134,23 @@ export function consentBootstrapScript(): string {
     if (cross) s.crossOrigin="anonymous";
     document.head.appendChild(s);
   }
+  function enableAds(){
+    if (!ADS) return;
+    inject("https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client="+encodeURIComponent(ADS), true);
+  }
+  function enableGa(){
+    if (!GA || document.querySelector('script[src*="googletagmanager.com/gtag/js"]')) return;
+    inject("https://www.googletagmanager.com/gtag/js?id="+encodeURIComponent(GA), false);
+    window.gtag("js", new Date());
+    window.gtag("config", GA, {
+      send_page_view: false,
+      anonymize_ip: true,
+      cookie_flags: "SameSite=None;Secure"
+    });
+  }
   function enable(){
-    if (ADS){
-      inject("https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client="+encodeURIComponent(ADS), true);
-    }
-    if (GA && !document.querySelector('script[src*="googletagmanager.com/gtag/js"]')){
-      inject("https://www.googletagmanager.com/gtag/js?id="+encodeURIComponent(GA), false);
-      window.gtag("js", new Date());
-      window.gtag("config", GA, {
-        send_page_view: false,
-        anonymize_ip: true,
-        cookie_flags: "SameSite=None;Secure"
-      });
-    }
+    enableAds();
+    enableGa();
   }
   window.__pbApplyConsent=function(choice){
     document.cookie=COOKIE+"="+choice+"; Path=/; Max-Age="+MAX_AGE+"; SameSite=Lax";
@@ -148,9 +166,11 @@ export function consentBootstrapScript(): string {
   };
   var choice=readChoice();
   var eea=isEea();
-  var allow=choice==="accepted" || (choice!=="rejected" && !eea);
-  window.__pbConsent={ choice: choice, eea: eea, allow: allow };
-  applyConsentMode(allow);
-  if (allow) enable();
+  var crawler=isAdsCrawler();
+  var humanAllow=choice==="accepted" || (choice!=="rejected" && !eea);
+  window.__pbConsent={ choice: choice, eea: eea, allow: humanAllow && !crawler };
+  applyConsentMode(humanAllow || crawler);
+  if (humanAllow || crawler) enableAds();
+  if (humanAllow && !crawler) enableGa();
 })();`;
 }

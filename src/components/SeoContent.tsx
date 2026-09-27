@@ -1,5 +1,11 @@
 import Link from "next/link";
 import { RelatedTools } from "@/components/RelatedTools";
+import {
+  HOME_CHOOSING,
+  HOME_CONTROLS,
+  HOME_PITFALLS,
+  HOME_SESSION,
+} from "@/content/home-editorial";
 
 const FAQS = [
   {
@@ -61,6 +67,91 @@ const WORKED = [
 export function SeoContent() {
   return (
     <div className="space-y-12">
+      <section aria-labelledby="choose-a-mode" className="scroll-mt-20">
+        <h2
+          id="choose-a-mode"
+          className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white"
+        >
+          Which percent question are you asking?
+        </h2>
+        <div className="mt-3 max-w-3xl space-y-3 leading-relaxed text-slate-600 dark:text-slate-400">
+          {HOME_CHOOSING.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+        </div>
+      </section>
+
+      <section aria-labelledby="home-controls">
+        <h2
+          id="home-controls"
+          className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white"
+        >
+          What each control on this page does
+        </h2>
+        <dl className="mt-4 max-w-3xl space-y-4">
+          {HOME_CONTROLS.map((control) => (
+            <div
+              key={control.name}
+              className="rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900"
+            >
+              <dt className="font-semibold text-slate-900 dark:text-white">
+                {control.name}
+              </dt>
+              <dd className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                {control.detail}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+
+      <section aria-labelledby="home-session">
+        <h2
+          id="home-session"
+          className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white"
+        >
+          A worked session on the homepage calculator
+        </h2>
+        <div className="mt-4 max-w-3xl space-y-6">
+          {HOME_SESSION.map((session) => (
+            <div key={session.title}>
+              <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
+                {session.title}
+              </h3>
+              <div className="mt-2 space-y-3 leading-relaxed text-slate-600 dark:text-slate-400">
+                {session.paragraphs.map((paragraph) => (
+                  <p key={paragraph}>{paragraph}</p>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section aria-labelledby="home-pitfalls">
+        <h2
+          id="home-pitfalls"
+          className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white"
+        >
+          Mistakes the homepage will not catch
+        </h2>
+        <div className="mt-4 space-y-4">
+          {HOME_PITFALLS.map((pitfall) => (
+            <div
+              key={pitfall.title}
+              className="rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900"
+            >
+              <h3 className="font-semibold text-slate-900 dark:text-white">
+                {pitfall.title}
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                {pitfall.detail}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <section id="how-it-works" className="scroll-mt-20">
         <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
           How to use this percentage calculator
