@@ -30,7 +30,7 @@ export default function PrivacyPage() {
         name: "Privacy Policy",
         url: absoluteUrl("/privacy"),
         isPartOf: { "@id": `${SITE_URL}/#website` },
-        dateModified: "2026-09-26",
+        dateModified: "2026-09-27",
       },
       breadcrumbJsonLd([
         { name: "Home", path: "/" },
@@ -52,7 +52,7 @@ export default function PrivacyPage() {
             Privacy Policy
           </h1>
           <p className="mt-2 text-sm text-slate-500">
-            Last updated: September 26, 2026
+            Last updated: September 27, 2026
           </p>
 
           <div className="mt-8 space-y-6 text-slate-600 dark:text-slate-400">
@@ -69,6 +69,49 @@ export default function PrivacyPage() {
                 optional Google AdSense. It also describes the limits of the
                 consent banner, which is a first-party control and not a
                 certified consent-management platform.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+                Who is responsible
+              </h2>
+              <p className="mt-2 leading-relaxed">
+                The person responsible for this site is Ricardo Rodrigues, in
+                Portugal. Contact{" "}
+                <a
+                  href={`mailto:${CONTACT_EMAIL}?subject=Privacy`}
+                  className="font-medium text-emerald-700 underline dark:text-emerald-400"
+                >
+                  {CONTACT_EMAIL}
+                </a>
+                . There is no separate data-protection officer and no company
+                registration published for PercentBox. This policy does not
+                claim that a supervisory authority has reviewed or approved the
+                site.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+                Personal data the site processes
+              </h2>
+              <p className="mt-2 leading-relaxed">
+                Numbers you type into a calculator stay in the browser. They
+                are not sent to a PercentBox server and are not used to build
+                an advertising profile. If you email us, we receive the address
+                you send from and whatever you put in the message. If you
+                accept analytics or ads, Google receives the data those
+                products normally collect (such as cookie identifiers, pages
+                visited, and coarse technical data). The host, Vercel, may keep
+                ordinary server logs: IP address, user agent, and timestamps.
+                Those logs are not the calculator inputs.
+              </p>
+              <p className="mt-2 leading-relaxed">
+                Theme and calculation history live in local storage on your
+                device. We do not receive them. The consent cookie (
+                <span className="font-mono">pb_consent</span>) stores only
+                Accept or Reject so the banner can remember the choice.
               </p>
             </section>
 
@@ -166,27 +209,36 @@ export default function PrivacyPage() {
                 <strong className="text-slate-800 dark:text-slate-200">
                   Reject non-essential
                 </strong>
-                . Non-essential means Google Analytics and the AdSense script.
-                Theme and calculation history are not gated, because they stay
-                on your device and are part of using the calculators.
+                . Non-essential means Google Analytics and ad requests. Theme
+                and calculation history are not gated, because they stay on
+                your device and are part of using the calculators.
               </p>
               <p className="mt-2 leading-relaxed">
-                If you reject, those scripts are not injected on later page
-                views, and a reload drops any that were already added in the
-                session. If you accept, the scripts may load and Consent Mode
-                is updated to granted.
+                When ads are enabled, the page includes the AdSense library (
+                <span className="font-mono">adsbygoogle.js</span>) in the HTML
+                so the ad code is present without waiting for a click. Ad
+                requests are paused until serving is allowed. If you reject,
+                they stay paused. Analytics is not added. If ads or analytics
+                were already allowed in that visit, the page reloads so those
+                requests stop. If you accept, Consent Mode is updated to
+                granted and paused ad requests are released. Analytics may
+                load at that point.
               </p>
               <p className="mt-2 leading-relaxed">
                 <strong className="text-slate-800 dark:text-slate-200">
-                  EEA and UK default.
+                  EEA, UK, and Switzerland default.
                 </strong>{" "}
                 Before a choice is stored, the site treats the browser as in
-                the EEA or the UK when the timezone is in Europe (or a few
-                Atlantic territories such as the Azores, Madeira, and the
-                Canary Islands) or when the browser language region is an EEA
-                or UK country code. In that case analytics and AdSense stay off
-                until you accept. Elsewhere, those scripts load unless you have
+                the EEA, the UK, or Switzerland when the timezone is in Europe
+                (or a few Atlantic territories such as the Azores, Madeira, and
+                the Canary Islands) or when the browser language region is an
+                EEA, UK, or Swiss country code. In that case analytics is not
+                loaded and ad requests stay paused until you accept. Elsewhere,
+                analytics loads and ad requests are allowed unless you have
                 rejected them, and the banner still lets you reject.
+                Switzerland is included because Google’s ad-consent
+                rules cover it, not because this page claims to implement the
+                Swiss Federal Act on Data Protection in full.
               </p>
               <p className="mt-2 leading-relaxed">
                 That test is a lightweight heuristic. It is not an IP-address
@@ -194,6 +246,23 @@ export default function PrivacyPage() {
                 and Consent Framework platform. It can misclassify a traveler, a
                 VPN, or a browser whose language does not match where the person
                 is. Cookie settings in the footer reopens the choice.
+              </p>
+              <p className="mt-2 leading-relaxed">
+                The library tag is in the HTML for every visitor when ads are
+                enabled, which is what an ad crawler needs to see without
+                clicking Accept. Google describes{" "}
+                <span className="font-mono">pauseAdRequests</span> as blocking
+                ad requests: while it is set, the library can still download,
+                existing cookies on Google’s domains may be read, and new ad
+                cookies should not be set. That is Google’s description of the
+                pause flag, not a separate promise from PercentBox. Google’s
+                own ad crawlers — user agents that identify as
+                Mediapartners-Google, Google-Display-Ads-Bot, or AdsBot-Google
+                — are not people. If that user agent runs the page script, ad
+                requests are unpaused so review can request ads. That path
+                does not write the consent cookie and does not load Google
+                Analytics. Pretending to be one of those crawlers is the only
+                way a visitor bypasses the pause without Accept.
               </p>
               <p className="mt-2 leading-relaxed">
                 When the scripts are allowed to run, the page sets Google
@@ -217,10 +286,20 @@ export default function PrivacyPage() {
                 technologies to show ads, measure them, and limit fraud. Third
                 parties, including Google, may use advertising identifiers to
                 serve ads based on visits to this and other sites where
-                personalization is permitted. In the EEA and the UK, personalized
+                personalization is permitted. In the EEA, the UK, and Switzerland, personalized
                 ads generally should not run unless a valid consent exists.
-                PercentBox’s banner is the control we provide; we do not claim
-                it is a full regulatory consent platform.
+                PercentBox’s banner is the control we provide. It is not a
+                Google-certified consent-management platform and it does not
+                create an IAB Transparency and Consent Framework string. Google’s
+                own AdSense policy, in place since January 16, 2024, requires a
+                certified CMP integrated with that framework when serving ads
+                to users in the EEA, the UK, and Switzerland. TCF version 2.3
+                became mandatory for consent strings generated on or after
+                March 1, 2026. Until a certified CMP is added, ad requests from
+                those regions may be limited or dropped even if someone clicks
+                Accept here. Consent Mode is still sent, because it tells
+                Google’s tags what the banner recorded. It is not a substitute
+                for a TCF string.
               </p>
               <p className="mt-2 leading-relaxed">
                 You can review ad personalization in{" "}
@@ -241,10 +320,10 @@ export default function PrivacyPage() {
                 >
                   how Google uses data when you use our partners’ sites or apps
                 </a>
-                . Rejecting non-essential cookies on PercentBox stops this site
-                from loading the AdSense script; it does not delete cookies
-                Google may already have set in a previous visit. Clear cookies
-                in the browser for that.
+                . Rejecting non-essential cookies pauses further ad requests and
+                keeps analytics from loading. It does not remove the library
+                tag from the HTML, and it does not delete cookies Google may
+                already have set. Clear cookies in the browser for that.
               </p>
               <p className="mt-2 leading-relaxed">
                 Manual ad units appear only when a placement ID is configured.
@@ -284,6 +363,114 @@ export default function PrivacyPage() {
                 The host (Vercel) may keep standard server logs — IP address,
                 user agent, and timestamps — for security and reliability. Those
                 logs are not the calculator inputs.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+                Why this data is used
+              </h2>
+              <p className="mt-2 leading-relaxed">
+                Where the GDPR applies, these are the bases we actually rely
+                on. They are not a certificate of compliance.
+              </p>
+              <ul className="mt-3 list-disc space-y-2 pl-5 leading-relaxed">
+                <li>
+                  Ad requests and analytics run only after Accept (or, outside
+                  the EEA, UK, and Switzerland heuristic, until you Reject).
+                  The basis for that optional processing is consent. The
+                  AdSense library file is referenced in the page HTML whenever
+                  ads are enabled, including before a choice, with requests
+                  paused where the banner has not allowed them. Reject, or
+                  Cookie settings in the footer, withdraws consent for later
+                  requests. Withdrawal does not undo a request Google already
+                  received.
+                </li>
+                <li>
+                  The consent cookie is stored so we can honor that choice.
+                </li>
+                <li>
+                  If you email us, we use the address and the message to reply.
+                  That is processing you started by writing. We do not add the
+                  address to a marketing list.
+                </li>
+                <li>
+                  Server logs, when the host keeps them, are used to operate
+                  and secure the site. Where an IP address in those logs is
+                  personal data, the basis is the legitimate interest in
+                  keeping the service available and diagnosing abuse. We do not
+                  use those logs to build an ad profile, and this policy does
+                  not claim a formal legitimate-interest assessment has been
+                  filed anywhere.
+                </li>
+              </ul>
+              <p className="mt-2 leading-relaxed">
+                Calculator results are not automated decisions that produce
+                legal effects. They are arithmetic on numbers you typed.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+                How long it stays
+              </h2>
+              <p className="mt-2 leading-relaxed">
+                The consent cookie is kept for about 180 days, then the banner
+                asks again. Calculation history is at most ten summaries and
+                stays until you clear it or clear site data. We do not set
+                Google’s cookie lifetimes; Google does, and only if its scripts
+                were allowed to run. Email is kept long enough to handle the
+                question and any follow-up. We do not publish a longer mailbox
+                archive than that.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+                International transfers
+              </h2>
+              <p className="mt-2 leading-relaxed">
+                PercentBox does not run its own servers outside the host we
+                use. Vercel may process requests, including log data, in the
+                United States or other countries. If you allow Google Analytics
+                or AdSense, Google may process that data outside the EEA under
+                Google’s own terms. Those terms describe Google’s transfer
+                tools. We do not operate a separate transfer contract of our
+                own, and we do not claim to have signed standard contractual
+                clauses in PercentBox’s name beyond whatever the host and
+                Google already require of a publisher account.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+                Your rights
+              </h2>
+              <p className="mt-2 leading-relaxed">
+                If the GDPR applies to you, you can ask for access,
+                rectification, erasure, restriction, or a copy of personal data
+                we actually hold, and you can object to processing that is
+                based on legitimate interests. You can withdraw consent for
+                analytics and ads at any time with Cookie settings. You can
+                also lodge a complaint with a supervisory authority. In
+                Portugal that authority is the Comissão Nacional de Proteção de
+                Dados (
+                <a
+                  href="https://www.cnpd.pt"
+                  className="font-medium text-emerald-700 underline dark:text-emerald-400"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  cnpd.pt
+                </a>
+                ). If you live elsewhere in the EEA, the UK, or Switzerland, you
+                may complain to the authority in your country instead. We will
+                respond to requests sent to {CONTACT_EMAIL}. Calculator inputs
+                that never left your browser are not data we can retrieve.
+              </p>
+              <p className="mt-2 leading-relaxed">
+                We do not sell personal information. We do not trade calculator
+                inputs for ads.
               </p>
             </section>
 

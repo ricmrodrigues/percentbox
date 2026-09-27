@@ -25,6 +25,10 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: "Mediapartners-Google",
         allow: "/",
       },
+      {
+        userAgent: "Google-Display-Ads-Bot",
+        allow: "/",
+      },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,
     host: SITE_URL,
