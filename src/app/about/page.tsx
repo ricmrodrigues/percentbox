@@ -198,11 +198,12 @@ export default function AboutPage() {
             <p>
               The site may show ads through Google AdSense so the tools can stay
               free, and it may use Google Analytics 4 to see which pages are
-              actually used. A first-party banner lets you accept or reject
-              those non-essential scripts.               Visitors whose browser looks like the
-              EEA, the UK, or Switzerland do not get those scripts until they
-              accept. Details,
-              including what this banner is not, are in the{" "}
+              actually used. The AdSense library tag is on the page whenever
+              ads are enabled. A first-party banner still decides whether ad
+              requests are allowed to run. Visitors whose browser looks like
+              the EEA, the UK, or Switzerland do not get analytics or ad
+              requests until they accept. Details, including what this banner
+              is not, are in the{" "}
               <Link
                 href="/privacy"
                 className="font-medium text-emerald-700 underline dark:text-emerald-400"

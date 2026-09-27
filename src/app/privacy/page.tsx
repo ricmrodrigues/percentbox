@@ -209,15 +209,20 @@ export default function PrivacyPage() {
                 <strong className="text-slate-800 dark:text-slate-200">
                   Reject non-essential
                 </strong>
-                . Non-essential means Google Analytics and the AdSense script.
-                Theme and calculation history are not gated, because they stay
-                on your device and are part of using the calculators.
+                . Non-essential means Google Analytics and ad requests. Theme
+                and calculation history are not gated, because they stay on
+                your device and are part of using the calculators.
               </p>
               <p className="mt-2 leading-relaxed">
-                If you reject, those scripts are not injected on later page
-                views, and a reload drops any that were already added in the
-                session. If you accept, the scripts may load and Consent Mode
-                is updated to granted.
+                When ads are enabled, the page includes the AdSense library (
+                <span className="font-mono">adsbygoogle.js</span>) in the HTML
+                so the ad code is present without waiting for a click. Ad
+                requests are paused until serving is allowed. If you reject,
+                they stay paused. Analytics is not added. If ads or analytics
+                were already allowed in that visit, the page reloads so those
+                requests stop. If you accept, Consent Mode is updated to
+                granted and paused ad requests are released. Analytics may
+                load at that point.
               </p>
               <p className="mt-2 leading-relaxed">
                 <strong className="text-slate-800 dark:text-slate-200">
@@ -227,10 +232,11 @@ export default function PrivacyPage() {
                 the EEA, the UK, or Switzerland when the timezone is in Europe
                 (or a few Atlantic territories such as the Azores, Madeira, and
                 the Canary Islands) or when the browser language region is an
-                EEA, UK, or Swiss country code. In that case analytics and
-                AdSense stay off until you accept. Elsewhere, those scripts
-                load unless you have rejected them, and the banner still lets
-                you reject. Switzerland is included because Google’s ad-consent
+                EEA, UK, or Swiss country code. In that case analytics is not
+                loaded and ad requests stay paused until you accept. Elsewhere,
+                analytics loads and ad requests are allowed unless you have
+                rejected them, and the banner still lets you reject.
+                Switzerland is included because Google’s ad-consent
                 rules cover it, not because this page claims to implement the
                 Swiss Federal Act on Data Protection in full.
               </p>
@@ -242,15 +248,21 @@ export default function PrivacyPage() {
                 is. Cookie settings in the footer reopens the choice.
               </p>
               <p className="mt-2 leading-relaxed">
-                Google’s own ad crawlers — user agents that identify as
+                The library tag is in the HTML for every visitor when ads are
+                enabled, which is what an ad crawler needs to see without
+                clicking Accept. Google describes{" "}
+                <span className="font-mono">pauseAdRequests</span> as blocking
+                ad requests: while it is set, the library can still download,
+                existing cookies on Google’s domains may be read, and new ad
+                cookies should not be set. That is Google’s description of the
+                pause flag, not a separate promise from PercentBox. Google’s
+                own ad crawlers — user agents that identify as
                 Mediapartners-Google, Google-Display-Ads-Bot, or AdsBot-Google
-                — are not people making a consent choice. So that AdSense can
-                see the ad tag during review, the page loads{" "}
-                <span className="font-mono">adsbygoogle.js</span> for those
-                crawlers even when the region heuristic would otherwise keep it
-                off. That path does not write the consent cookie and does not
-                load Google Analytics. It is not a way for a visitor to bypass
-                the banner except by pretending to be one of those crawlers.
+                — are not people. If that user agent runs the page script, ad
+                requests are unpaused so review can request ads. That path
+                does not write the consent cookie and does not load Google
+                Analytics. Pretending to be one of those crawlers is the only
+                way a visitor bypasses the pause without Accept.
               </p>
               <p className="mt-2 leading-relaxed">
                 When the scripts are allowed to run, the page sets Google
@@ -274,7 +286,7 @@ export default function PrivacyPage() {
                 technologies to show ads, measure them, and limit fraud. Third
                 parties, including Google, may use advertising identifiers to
                 serve ads based on visits to this and other sites where
-                personalization is permitted.                 In the EEA, the UK, and Switzerland, personalized
+                personalization is permitted. In the EEA, the UK, and Switzerland, personalized
                 ads generally should not run unless a valid consent exists.
                 PercentBox’s banner is the control we provide. It is not a
                 Google-certified consent-management platform and it does not
@@ -308,10 +320,10 @@ export default function PrivacyPage() {
                 >
                   how Google uses data when you use our partners’ sites or apps
                 </a>
-                . Rejecting non-essential cookies on PercentBox stops this site
-                from loading the AdSense script; it does not delete cookies
-                Google may already have set in a previous visit. Clear cookies
-                in the browser for that.
+                . Rejecting non-essential cookies pauses further ad requests and
+                keeps analytics from loading. It does not remove the library
+                tag from the HTML, and it does not delete cookies Google may
+                already have set. Clear cookies in the browser for that.
               </p>
               <p className="mt-2 leading-relaxed">
                 Manual ad units appear only when a placement ID is configured.
@@ -364,12 +376,15 @@ export default function PrivacyPage() {
               </p>
               <ul className="mt-3 list-disc space-y-2 pl-5 leading-relaxed">
                 <li>
-                  Analytics and advertising cookies and scripts run only after
-                  Accept (or, outside the EEA, UK, and Switzerland heuristic,
-                  until you Reject). The basis for that optional processing is
-                  consent. Reject, or Cookie settings in the footer, withdraws
-                  it for later page views. Withdrawal does not undo a request
-                  Google already received.
+                  Ad requests and analytics run only after Accept (or, outside
+                  the EEA, UK, and Switzerland heuristic, until you Reject).
+                  The basis for that optional processing is consent. The
+                  AdSense library file is referenced in the page HTML whenever
+                  ads are enabled, including before a choice, with requests
+                  paused where the banner has not allowed them. Reject, or
+                  Cookie settings in the footer, withdraws consent for later
+                  requests. Withdrawal does not undo a request Google already
+                  received.
                 </li>
                 <li>
                   The consent cookie is stored so we can honor that choice.

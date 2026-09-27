@@ -33,3 +33,14 @@ export const ADSENSE_SLOTS: Record<AdPlacement, string> = {
 export function hasManualSlot(placement: AdPlacement): boolean {
   return Boolean(ADSENSE_SLOTS[placement]);
 }
+
+/**
+ * Static library URL for the root layout. Empty when ads are disabled.
+ * The client id is restricted to the characters AdSense actually uses so a
+ * bad env value cannot break out of the script src.
+ */
+export function adsenseLibrarySrc(): string {
+  if (!isAdsenseEnabled) return "";
+  if (!/^ca-pub-[0-9]+$/.test(ADSENSE_CLIENT)) return "";
+  return `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`;
+}

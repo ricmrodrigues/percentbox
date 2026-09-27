@@ -4,7 +4,7 @@ import { ConsentBanner } from "@/components/ConsentBanner";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { InstallHint } from "@/components/InstallHint";
 import { JsonLd } from "@/components/JsonLd";
-import { ADSENSE_CLIENT } from "@/lib/adsense";
+import { ADSENSE_CLIENT, adsenseLibrarySrc } from "@/lib/adsense";
 import { consentBootstrapScript } from "@/lib/consent";
 import {
   SITE_NAME,
@@ -140,6 +140,21 @@ const themeScript = `
 })();
 `;
 
+/**
+ * Consent bootstrap, then the static AdSense library tag.
+ * A React <script src> is hoisted above inline scripts, so a cached
+ * adsbygoogle.js can fire requests before pauseAdRequests exists. Closing
+ * the inline script and opening the library tag in the same HTML string
+ * keeps the pause flag first. The client id is already constrained to
+ * ca-pub-[0-9]+.
+ */
+function consentAndAdsenseHeadHtml(): string {
+  const consent = consentBootstrapScript().replace(/<\/script/gi, "<\\/script");
+  const src = adsenseLibrarySrc();
+  if (!src) return consent;
+  return `${consent}</script><script async src="${src}" crossorigin="anonymous">`;
+}
+
 const rootJsonLd = {
   "@context": "https://schema.org",
   "@graph": [organizationJsonLd(), websiteJsonLd(), webAppJsonLd()],
@@ -160,7 +175,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         <script
           id="percentbox-consent"
-          dangerouslySetInnerHTML={{ __html: consentBootstrapScript() }}
+          dangerouslySetInnerHTML={{ __html: consentAndAdsenseHeadHtml() }}
         />
       </head>
       <body

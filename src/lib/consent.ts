@@ -65,15 +65,16 @@ function safeToken(value: string): string {
 }
 
 /**
- * Inline head bootstrap. Runs before hydration so AdSense and GA are present
- * after JavaScript execution for visitors who are allowed to receive them.
+ * Inline head bootstrap. Runs synchronously before the static adsbygoogle.js
+ * tag that follows it in the layout.
  *
- * EEA/UK/Switzerland (timezone or language region) defaults to denied until Accept.
- * Everyone else loads the scripts unless they previously chose Reject.
- * A stored Reject never loads the scripts.
- * Google's ad crawlers (not people, and not a stored consent choice) receive
- * adsbygoogle.js even when the region heuristic would withhold it, so review
- * can see the ad tag. Analytics stays off for those user agents.
+ * The ad library itself is not injected here. Ad *requests* are paused with
+ * pauseAdRequests until this browser is allowed to be served ads: Accept, a
+ * stored Accept, or a non-EEA/UK/Switzerland visitor who has not rejected.
+ * Reject leaves requests paused. Google Analytics stays fully gated.
+ *
+ * Google's ad crawlers are unpaused so a bot that executes this script can
+ * request ads. They are not people and no consent cookie is written for them.
  *
  * next/script is intentionally not used for adsbygoogle.js: it adds
  * data-nscript, which AdSense rejects on the head tag.
@@ -126,21 +127,16 @@ export function consentBootstrapScript(): string {
     });
     window.__pbConsentBooted=true;
   }
-  function inject(src, cross){
+  function inject(src){
     if (document.querySelector('script[src="'+src+'"]')) return;
     var s=document.createElement("script");
     s.async=true;
     s.src=src;
-    if (cross) s.crossOrigin="anonymous";
     document.head.appendChild(s);
-  }
-  function enableAds(){
-    if (!ADS) return;
-    inject("https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client="+encodeURIComponent(ADS), true);
   }
   function enableGa(){
     if (!GA || document.querySelector('script[src*="googletagmanager.com/gtag/js"]')) return;
-    inject("https://www.googletagmanager.com/gtag/js?id="+encodeURIComponent(GA), false);
+    inject("https://www.googletagmanager.com/gtag/js?id="+encodeURIComponent(GA));
     window.gtag("js", new Date());
     window.gtag("config", GA, {
       send_page_view: false,
@@ -148,19 +144,28 @@ export function consentBootstrapScript(): string {
       cookie_flags: "SameSite=None;Secure"
     });
   }
-  function enable(){
-    enableAds();
-    enableGa();
+  var autoAdsQueued=false;
+  function queueAutoAds(){
+    if (!ADS || autoAdsQueued) return;
+    autoAdsQueued=true;
+    var q=window.adsbygoogle=window.adsbygoogle||[];
+    try { q.push({google_ad_client: ADS, enable_page_level_ads: true}); } catch(e){}
+  }
+  function setAdPause(paused){
+    var q=window.adsbygoogle=window.adsbygoogle||[];
+    q.pauseAdRequests=paused?1:0;
   }
   window.__pbApplyConsent=function(choice){
+    var wasServing=!!(window.__pbConsent&&window.__pbConsent.allow);
     document.cookie=COOKIE+"="+choice+"; Path=/; Max-Age="+MAX_AGE+"; SameSite=Lax";
     var granted=choice==="accepted";
     var eea=isEea();
     window.__pbConsent={ choice: choice, eea: eea, allow: granted };
     applyConsentMode(granted);
-    if (granted) enable();
+    setAdPause(!granted);
+    if (granted) enableGa();
     try { window.dispatchEvent(new Event("pb-consent")); } catch(e){}
-    if (!granted && document.querySelector('script[src*="googlesyndication.com"],script[src*="googletagmanager.com/gtag"]')){
+    if (!granted && (wasServing || document.querySelector('script[src*="googletagmanager.com/gtag"]'))){
       window.location.reload();
     }
   };
@@ -168,9 +173,12 @@ export function consentBootstrapScript(): string {
   var eea=isEea();
   var crawler=isAdsCrawler();
   var humanAllow=choice==="accepted" || (choice!=="rejected" && !eea);
+  var serveAds=humanAllow || crawler;
   window.__pbConsent={ choice: choice, eea: eea, allow: humanAllow && !crawler };
-  applyConsentMode(humanAllow || crawler);
-  if (humanAllow || crawler) enableAds();
+  setAdPause(true);
+  queueAutoAds();
+  if (serveAds) setAdPause(false);
+  applyConsentMode(serveAds);
   if (humanAllow && !crawler) enableGa();
 })();`;
 }

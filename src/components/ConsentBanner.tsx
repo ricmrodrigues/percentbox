@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 
 /**
- * First-party Accept / Reject banner. The head bootstrap already applied
- * Consent Mode and loaded (or withheld) AdSense and GA before hydration.
+ * First-party Accept / Reject banner. The ad library tag is static. This
+ * banner gates ad requests (pauseAdRequests) and Google Analytics.
  */
 export function ConsentBanner() {
   const [open, setOpen] = useState(false);
@@ -50,7 +50,7 @@ export function ConsentBanner() {
             className="mt-1 text-sm leading-relaxed text-slate-600 dark:text-slate-400"
           >
             {eea
-              ? "Analytics and advertising stay off until you accept. Essential storage (theme and the calculations you choose to keep on this device) is unaffected."
+              ? "Analytics stays off, and ad requests stay paused, until you accept. Essential storage (theme and the calculations you choose to keep on this device) is unaffected."
               : "We use optional analytics and ads to keep the calculators free. Reject non-essential cookies if you would rather not load them."}{" "}
             Details are in the{" "}
             <Link
