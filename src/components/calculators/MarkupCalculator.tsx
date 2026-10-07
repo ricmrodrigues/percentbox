@@ -10,7 +10,9 @@ import {
   parseNum,
   sellFromMargin,
 } from "@/lib/phase-a";
+import { useShareableParams } from "@/lib/share";
 import { CalcInput, CalcShell, ChipRow, ResultBlock } from "./CalcShell";
+import { StepsAndShare } from "./Steps";
 
 type Mode = "markup" | "margin" | "from-prices";
 
@@ -20,6 +22,12 @@ export function MarkupCalculator() {
   const [percent, setPercent] = useState("40");
   const [sell, setSell] = useState("70");
   const tracked = useRef("");
+  useShareableParams({ mode, cost, pct: percent, sell }, (q) => {
+    if (q.mode === "markup" || q.mode === "margin" || q.mode === "from-prices") setMode(q.mode);
+    if (q.cost && parseNum(q.cost) !== null) setCost(q.cost);
+    if (q.pct && parseNum(q.pct) !== null) setPercent(q.pct);
+    if (q.sell && parseNum(q.sell) !== null) setSell(q.sell);
+  });
 
   useEffect(() => {
     trackToolView("markup", mode);
@@ -65,6 +73,36 @@ export function MarkupCalculator() {
     };
   }, [mode, cost, percent, sell]);
 
+  const steps = useMemo(() => {
+    const c = parseNum(cost);
+    const p = parseNum(percent);
+    const s = parseNum(sell);
+    if (mode === "markup" && c !== null && p !== null) {
+      const sp = c * (1 + p / 100);
+      return [
+        `Markup amount = ${formatNum(p)}% of cost = ${formatMoney(c)} × ${formatNum(p / 100)} = ${formatMoney(sp - c)}.`,
+        `Sell price = cost + markup = ${formatMoney(c)} + ${formatMoney(sp - c)} = ${formatMoney(sp)}.`,
+        sp === 0 ? "Sell price is 0, so margin is undefined." : `Margin = profit ÷ sell = ${formatMoney(sp - c)} ÷ ${formatMoney(sp)} = ${formatNum(((sp - c) / sp) * 100, 2)}%. Same profit, bigger base, smaller percent.`,
+      ];
+    }
+    if (mode === "margin" && c !== null && p !== null && p < 100) {
+      const sp = c / (1 - p / 100);
+      return [
+        `A ${formatNum(p)}% margin means cost is ${formatNum(100 - p)}% of the sell price.`,
+        `Sell price = cost ÷ ${formatNum(1 - p / 100)} = ${formatMoney(c)} ÷ ${formatNum(1 - p / 100)} = ${formatMoney(sp)}.`,
+        c === 0 ? "Cost is 0, so markup is undefined." : `Markup on cost = ${formatMoney(sp - c)} ÷ ${formatMoney(c)} = ${formatNum(((sp - c) / c) * 100, 2)}%. Adding ${formatNum(p)}% to cost would have given only ${formatMoney(c * (1 + p / 100))}.`,
+      ];
+    }
+    if (mode === "from-prices" && c !== null && s !== null && s !== 0) {
+      return [
+        `Profit = sell − cost = ${formatMoney(s)} − ${formatMoney(c)} = ${formatMoney(s - c)}.`,
+        `Margin = profit ÷ sell × 100 = ${formatNum(((s - c) / s) * 100, 2)}%.`,
+        c === 0 ? "Cost is 0, so markup is undefined." : `Markup = profit ÷ cost × 100 = ${formatNum(((s - c) / c) * 100, 2)}%.`,
+      ];
+    }
+    return [];
+  }, [mode, cost, percent, sell]);
+
   useEffect(() => {
     if (!result || result.primary === "—") return;
     const key = `${mode}|${cost}|${percent}|${sell}`;
@@ -82,11 +120,14 @@ export function MarkupCalculator() {
       description="Convert between cost, sell price, markup %, and profit margin %"
       result={
         result ? (
+          <div>
           <ResultBlock
             primary={result.primary}
             detail={result.detail}
             formula={result.formula}
           />
+          <StepsAndShare steps={steps} />
+          </div>
         ) : (
           <ResultBlock primary="—" detail="Enter values to calculate" />
         )

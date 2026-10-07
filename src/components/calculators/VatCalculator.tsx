@@ -10,13 +10,20 @@ import {
   vatCalc,
   type VatMode,
 } from "@/lib/phase-a";
+import { useShareableParams } from "@/lib/share";
 import { CalcInput, CalcShell, ChipRow, ResultBlock } from "./CalcShell";
+import { StepsAndShare } from "./Steps";
 
 export function VatCalculator() {
   const [amount, setAmount] = useState("100");
   const [rate, setRate] = useState("23");
   const [mode, setMode] = useState<VatMode>("add");
   const tracked = useRef("");
+  useShareableParams({ mode, amount, rate }, (q) => {
+    if (q.mode === "add" || q.mode === "extract") setMode(q.mode);
+    if (q.amount && parseNum(q.amount) !== null) setAmount(q.amount);
+    if (q.rate && parseNum(q.rate) !== null) setRate(q.rate);
+  });
 
   useEffect(() => {
     trackToolView("vat", mode);
@@ -28,6 +35,20 @@ export function VatCalculator() {
     if (a === null || r === null || r < 0) return null;
     return vatCalc(a, r, mode);
   }, [amount, rate, mode]);
+
+  const steps = result
+    ? mode === "add"
+      ? [
+          `VAT = net × rate = ${formatMoney(result.net)} × ${rate}% = ${formatMoney(result.vat)}.`,
+          `Gross = net + VAT = ${formatMoney(result.net)} + ${formatMoney(result.vat)} = ${formatMoney(result.gross)}.`,
+          `To reverse it later, divide the gross by 1 + rate — do not subtract ${rate}% of the gross.`,
+        ]
+      : [
+          `Divide the gross by 1 + rate: ${formatMoney(result.gross)} ÷ ${formatNum(1 + (parseNum(rate) ?? 0) / 100, 4)} = ${formatMoney(result.net)} net.`,
+          `VAT = gross − net = ${formatMoney(result.gross)} − ${formatMoney(result.net)} = ${formatMoney(result.vat)}.`,
+          `So VAT is ${formatNum(result.gross ? (result.vat / result.gross) * 100 : 0, 2)}% of the gross price, not ${rate}%. Taking ${rate}% of the gross would overstate it by ${formatMoney(result.gross * (parseNum(rate) ?? 0) / 100 - result.vat)}.`,
+        ]
+    : [];
 
   useEffect(() => {
     if (!result) return;
@@ -48,11 +69,11 @@ export function VatCalculator() {
         result ? (
           <div>
             <ResultBlock
-              primary={`$${formatMoney(mode === "add" ? result.gross : result.net)}`}
+              primary={`${formatMoney(mode === "add" ? result.gross : result.net)}`}
               detail={
                 mode === "add"
-                  ? `Net $${formatMoney(result.net)} + VAT $${formatMoney(result.vat)} = Gross $${formatMoney(result.gross)}`
-                  : `Gross $${formatMoney(result.gross)} − VAT $${formatMoney(result.vat)} = Net $${formatMoney(result.net)}`
+                  ? `Net ${formatMoney(result.net)} + VAT ${formatMoney(result.vat)} = Gross ${formatMoney(result.gross)}`
+                  : `Gross ${formatMoney(result.gross)} − VAT ${formatMoney(result.vat)} = Net ${formatMoney(result.net)}`
               }
               formula={
                 mode === "add"
@@ -74,11 +95,12 @@ export function VatCalculator() {
                     {label as string}
                   </p>
                   <p className="text-sm font-bold text-slate-800 dark:text-slate-100">
-                    ${formatMoney(val as number)}
+                    {formatMoney(val as number)}
                   </p>
                 </div>
               ))}
             </div>
+            <StepsAndShare steps={steps} />
           </div>
         ) : (
           <ResultBlock primary="—" detail="Enter amount and rate" />
@@ -103,8 +125,7 @@ export function VatCalculator() {
         label={mode === "add" ? "Net amount (ex-VAT)" : "Gross amount (inc-VAT)"}
         value={amount}
         onChange={setAmount}
-        prefix="$"
-        placeholder="100"
+                placeholder="100"
       />
       <CalcInput
         id="rate"

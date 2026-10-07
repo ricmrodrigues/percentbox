@@ -16,8 +16,10 @@ import {
   parseNum,
   percentOf,
   percentageChange,
+  stepsFor,
   tipCalc,
 } from "@/lib/calculations";
+import { useCopyLink, useShareableParams } from "@/lib/share";
 import {
   type HistoryItem,
   addHistoryItem,
@@ -193,6 +195,26 @@ export function Calculator({
     window.addEventListener(LOAD_EXAMPLE_EVENT, onLoadExample);
     return () => window.removeEventListener(LOAD_EXAMPLE_EVENT, onLoadExample);
   }, []);
+
+  useShareableParams(
+    { mode, a, b, dir: mode === "increase-decrease" ? direction : "", people: mode === "tip" && people !== "1" ? people : "" },
+    (q) => {
+      if (q.mode && (MODES as string[]).includes(q.mode)) setMode(q.mode as CalculatorMode);
+      if (q.a && /^-?\d*\.?\d*$/.test(q.a)) setA(q.a);
+      if (q.b && /^-?\d*\.?\d*$/.test(q.b)) setB(q.b);
+      if (q.dir === "increase" || q.dir === "decrease") setDirection(q.dir);
+      if (q.people && /^\d+$/.test(q.people)) setPeople(q.people);
+    },
+  );
+  const link = useCopyLink();
+
+  const steps = useMemo(() => {
+    const nA = parseNum(a);
+    const nB = parseNum(b);
+    if (nA === null || nB === null) return [];
+    const nPeople = parseNum(people) ?? 1;
+    return stepsFor(mode, nA, nB, direction, nPeople > 0 ? nPeople : 1);
+  }, [mode, a, b, direction, people]);
 
   const switchMode = (m: CalculatorMode) => {
     setMode(m);
@@ -647,9 +669,30 @@ export function Calculator({
               >
                 Clear
               </button>
+              <button
+                type="button"
+                onClick={link.copy}
+                disabled={!result}
+                className="inline-flex cursor-pointer items-center justify-center rounded-xl px-3 py-2 text-sm font-medium text-emerald-700 transition hover:bg-white/60 disabled:cursor-not-allowed disabled:opacity-40 dark:text-emerald-300 dark:hover:bg-slate-800/60"
+              >
+                {link.copied ? "Link copied" : "Copy link"}
+              </button>
             </div>
           </div>
         </div>
+
+        {steps.length > 0 && (
+          <div className="mt-5" aria-live="polite">
+            <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+              Step-by-step for your numbers
+            </h3>
+            <ol className="mt-2 list-decimal space-y-1.5 pl-5 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+              {steps.map((step) => (
+                <li key={step}>{step}</li>
+              ))}
+            </ol>
+          </div>
+        )}
       </div>
 
       {/* History */}
