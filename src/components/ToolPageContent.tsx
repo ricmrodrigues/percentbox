@@ -4,7 +4,12 @@ import { CompoundInterestCalculator } from "@/components/calculators/CompoundInt
 import { LoanCalculator } from "@/components/calculators/LoanCalculator";
 import { MarkupCalculator } from "@/components/calculators/MarkupCalculator";
 import { VatCalculator } from "@/components/calculators/VatCalculator";
+import { CagrCalculator } from "@/components/calculators/CagrCalculator";
+import { PercentagePointsCalculator } from "@/components/calculators/PercentagePointsCalculator";
+import { WeightedGradeCalculator } from "@/components/calculators/WeightedGradeCalculator";
+import { AdSlot } from "@/components/AdSlot";
 import { RelatedTools } from "@/components/RelatedTools";
+import { ToolExtras } from "@/components/ToolExtras";
 import { getGuide } from "@/content/guides";
 import { getToolEditorial, type ToolEditorial } from "@/lib/tool-editorial";
 import type { ToolPage } from "@/lib/seo";
@@ -19,6 +24,12 @@ function ToolCalculator({ tool }: { tool: ToolPage }) {
       return <CompoundInterestCalculator />;
     case "loan":
       return <LoanCalculator />;
+    case "points":
+      return <PercentagePointsCalculator />;
+    case "cagr":
+      return <CagrCalculator />;
+    case "weighted":
+      return <WeightedGradeCalculator />;
     case "percent":
     default: {
       const direction =
@@ -101,6 +112,11 @@ export function ToolPageContent({ tool }: { tool: ToolPage }) {
       <div id="calculator" className="scroll-mt-20">
         <ToolCalculator tool={tool} />
       </div>
+
+      <ToolExtras slug={tool.slug} />
+
+      {/* First ad unit sits below the calculator and its table, never above it. */}
+      <AdSlot slot="top" />
 
       <section aria-labelledby="about-tool">
         <h2

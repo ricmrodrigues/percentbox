@@ -1,5 +1,6 @@
 import type { CalculatorMode } from "./calculations";
 import { MODE_META } from "./calculations";
+import { NEW_TOOLS } from "@/content/tools/new-tools";
 
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || "https://percentbox.com";
@@ -20,7 +21,10 @@ export type CalculatorKind =
   | "markup"
   | "vat"
   | "compound"
-  | "loan";
+  | "loan"
+  | "points"
+  | "cagr"
+  | "weighted";
 
 export interface ToolPage {
   slug: string;
@@ -508,6 +512,7 @@ export const TOOLS: ToolPage[] = [
     ],
   },
 
+  ...NEW_TOOLS,
 ];
 
 export function getToolBySlug(slug: string): ToolPage | undefined {
@@ -583,6 +588,11 @@ export function webAppJsonLd() {
     },
     description: SITE_TAGLINE,
     featureList: [
+      "Step-by-step working for your own inputs",
+      "Shareable result links",
+      "Percentage points vs percent change",
+      "CAGR",
+      "Weighted grade average",
       "What is X% of Y",
       "Percentage change",
       "Tip and discount",
@@ -623,31 +633,32 @@ export function faqJsonLd(faqs: { q: string; a: string }[]) {
   };
 }
 
-export function howToJsonLd(tool: ToolPage) {
+export function howToJsonLd(
+  tool: ToolPage,
+  fields?: { name: string; detail: string }[],
+) {
+  const fieldSteps = (fields ?? []).map((f) => ({
+    name: f.name,
+    text: f.detail,
+  }));
+  const steps =
+    fieldSteps.length > 0
+      ? fieldSteps
+      : [
+          { name: "Enter your numbers", text: "Type the values into the input fields. Results update as you type." },
+          { name: "Read the result", text: "See the answer, the step-by-step working, and the formula." },
+        ];
   return {
     "@type": "HowTo",
-    name: `How to use the ${tool.shortTitle}`,
+    name: `How to use the ${tool.shortTitle} calculator`,
     description: tool.intro,
-    step: [
-      {
-        "@type": "HowToStep",
-        position: 1,
-        name: "Open the calculator",
-        text: `Go to the ${tool.shortTitle} on PercentBox.`,
-      },
-      {
-        "@type": "HowToStep",
-        position: 2,
-        name: "Enter your numbers",
-        text: "Type the values into the input fields. Results update as you type.",
-      },
-      {
-        "@type": "HowToStep",
-        position: 3,
-        name: "Read the result",
-        text: "See the answer, detail line, and formula. Copy the result if needed.",
-      },
-    ],
+    step: steps.map((s, i) => ({
+      "@type": "HowToStep",
+      position: i + 1,
+      name: s.name,
+      text: s.text,
+      url: `${absoluteUrl(`/${tool.slug}`)}#calculator`,
+    })),
   };
 }
 

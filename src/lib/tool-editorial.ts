@@ -1,4 +1,5 @@
 import { TOOL_DEPTH } from "@/content/tools";
+import { NEW_TOOL_EDITORIAL } from "@/content/tools/new-tools";
 import { TOOLS } from "@/lib/seo";
 
 export interface ToolFieldNote {
@@ -438,6 +439,8 @@ export const TOOL_EDITORIAL: Record<string, ToolEditorialBase> = {
     ],
   },
 };
+
+Object.assign(TOOL_EDITORIAL, NEW_TOOL_EDITORIAL);
 
 const EMPTY_DEPTH = {
   relatedGuides: [] as string[],
