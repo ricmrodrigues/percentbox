@@ -50,7 +50,7 @@ export default function TermsPage() {
             Terms of use
           </h1>
           <p className="mt-2 text-sm text-slate-500">
-            Last updated: September 26, 2026
+            Last updated: October 7, 2026
           </p>
           <div className="mt-8 space-y-6 text-slate-600 dark:text-slate-400">
             <section>
@@ -121,6 +121,36 @@ export default function TermsPage() {
                   privacy policy
                 </Link>
                 . An advertisement is not an endorsement.
+              </p>
+            </section>
+            <section>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+                Shared result links
+              </h2>
+              <p className="mt-2 leading-relaxed">
+                Calculators write your inputs into the page address so that
+                “Copy link” reproduces the same calculation. Anyone you send the
+                link to sees those numbers. Nothing is saved on a PercentBox
+                server to make this work; the link itself carries the values. Do
+                not put information in a shared link that you would not want
+                the recipient to read.
+              </p>
+            </section>
+            <section>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+                Corrections
+              </h2>
+              <p className="mt-2 leading-relaxed">
+                If a formula, rate, or explanation is wrong, report it through
+                the contact page. Confirmed corrections are fixed on the page
+                and recorded on the{" "}
+                <Link
+                  href="/changelog"
+                  className="font-medium text-emerald-700 underline dark:text-emerald-400"
+                >
+                  changelog
+                </Link>
+                .
               </p>
             </section>
             <section>

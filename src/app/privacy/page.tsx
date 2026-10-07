@@ -52,7 +52,7 @@ export default function PrivacyPage() {
             Privacy Policy
           </h1>
           <p className="mt-2 text-sm text-slate-500">
-            Last updated: September 27, 2026
+            Last updated: October 7, 2026
           </p>
 
           <div className="mt-8 space-y-6 text-slate-600 dark:text-slate-400">
@@ -362,7 +362,26 @@ export default function PrivacyPage() {
               <p className="mt-2 leading-relaxed">
                 The host (Vercel) may keep standard server logs — IP address,
                 user agent, and timestamps — for security and reliability. Those
-                logs are not the calculator inputs.
+                logs do not contain what you type into a calculator. One
+                exception: calculators keep your inputs in the page address so
+                you can share a result. If you open or share such a link, the
+                numbers in it are part of the requested URL and can appear in
+                those logs, in your browser history, and wherever you paste it.
+              </p>
+              <p className="mt-2 leading-relaxed">
+                PercentBox also uses Vercel Web Analytics to count page views.
+                It does not set cookies and does not build a profile of you
+                across sites; it records the page path, referrer, country, and
+                device/browser type in aggregate so we can see which pages
+                people actually use. See{" "}
+                <a
+                  href="https://vercel.com/docs/analytics/privacy-policy"
+                  className="font-medium text-emerald-700 underline dark:text-emerald-400"
+                  rel="noopener"
+                >
+                  Vercel’s analytics privacy notes
+                </a>
+                .
               </p>
             </section>
 
