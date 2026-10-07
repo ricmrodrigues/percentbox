@@ -258,7 +258,7 @@ A true 28% off can be a good price. The point of the arithmetic is not to sneer 
       "Simple interest stays on the original principal. Compound interest pays interest on interest. A side-by-side balance sheet shows when the gap is small and when it takes over.",
     published,
     updated,
-    relatedTools: ["compound-interest-calculator", "loan-calculator"],
+    relatedTools: ["cagr-calculator", "compound-interest-calculator", "loan-calculator"],
     relatedGuides: ["compound-interest-basics", "effective-annual-rate"],
     faqs: [
       {
@@ -424,7 +424,7 @@ Calculate EAR when two savings offers quote different compounding rhythms, or wh
       "Turn marks into a percent, weight several assignments, and avoid the average-of-averages trap when one exam counts more than homework.",
     published,
     updated,
-    relatedTools: ["x-is-what-percent-of-y", "percentage-calculator"],
+    relatedTools: ["weighted-grade-calculator", "x-is-what-percent-of-y", "percentage-calculator"],
     relatedGuides: ["how-to-calculate-percentages", "common-percentage-mistakes"],
     faqs: [
       {

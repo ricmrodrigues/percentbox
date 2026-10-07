@@ -155,7 +155,7 @@ Do not average a pile of percentages until you know each one was taken of a comp
       "Why a rate moving from 8% to 10% is 2 percentage points and also a 25% relative increase, with polls, grades, and interest-rate examples.",
     published,
     updated,
-    relatedTools: ["percentage-change-calculator", "percentage-increase-calculator"],
+    relatedTools: ["percentage-point-calculator", "percentage-change-calculator", "percentage-increase-calculator"],
     relatedGuides: ["common-percentage-mistakes", "how-to-calculate-percentages"],
     faqs: [
       {

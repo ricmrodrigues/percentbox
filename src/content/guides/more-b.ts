@@ -88,7 +88,7 @@ Do the bonus and the salary as separate rows if either one can be quoted alone i
       "Separate a nominal price change from a real one, apply an index without pretending it is your personal cost of living, and avoid subtracting large rates carelessly.",
     published,
     updated,
-    relatedTools: ["percentage-change-calculator"],
+    relatedTools: ["cagr-calculator", "percentage-change-calculator"],
     relatedGuides: ["percentage-change-from-a-to-b", "salary-increase-percentage"],
     faqs: [
       {
@@ -243,7 +243,7 @@ Do not use it to discover the rate. A combined local sales-tax rate, or the corr
       "Why a loan’s nominal interest rate and its APR can differ, what fees do to the comparison, and what a fixed-rate EMI calculator still will not show.",
     published,
     updated,
-    relatedTools: ["loan-calculator"],
+    relatedTools: ["percentage-point-calculator", "loan-calculator"],
     relatedGuides: ["how-loan-emi-works", "effective-annual-rate"],
     faqs: [
       {

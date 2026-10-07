@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { AdSlot } from "@/components/AdSlot";
+import { EditorialMeta } from "@/components/EditorialMeta";
+import { SITE_LAST_UPDATED } from "@/lib/site-meta";
 import { Calculator } from "@/components/Calculator";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
@@ -117,12 +119,13 @@ export default function Home() {
               </Link>
               .
             </p>
+            <div className="flex justify-center">
+              <EditorialMeta updated={SITE_LAST_UPDATED} />
+            </div>
           </div>
         </section>
 
         <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
-          <AdSlot slot="top" className="mb-6" />
-
           <div className="grid gap-6 lg:grid-cols-[1fr_300px]">
             <div id="calculator" className="min-w-0 scroll-mt-20">
               <Calculator />
@@ -147,7 +150,7 @@ export default function Home() {
                   </li>
                   <li className="flex gap-2">
                     <span className="mt-0.5 text-emerald-500">✓</span>
-                    Copy any result with one click
+                    Step-by-step working for your own numbers; “Copy link” shares it
                   </li>
                   <li className="flex gap-2">
                     <span className="mt-0.5 text-emerald-500">✓</span>
@@ -175,6 +178,9 @@ export default function Home() {
                     ["Tip calculator", "/tip-calculator"],
                     ["Discount calculator", "/discount-calculator"],
                     ["Percentage change", "/percentage-change-calculator"],
+                    ["Percentage points vs percent", "/percentage-point-calculator"],
+                    ["CAGR (annual growth)", "/cagr-calculator"],
+                    ["Weighted grade", "/weighted-grade-calculator"],
                   ].map(([label, href]) => (
                     <li key={href}>
                       <Link

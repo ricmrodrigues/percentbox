@@ -430,7 +430,7 @@ Use the [percentage calculator](/percentage-calculator) for the figure you will 
       "The base-value mixups, percentage-point confusions, stacked discounts, and reverse-percent errors that make a correct formula give the wrong decision.",
     published,
     updated,
-    relatedTools: [
+    relatedTools: ["percentage-point-calculator", 
       "percentage-calculator",
       "percentage-change-calculator",
       "discount-calculator",

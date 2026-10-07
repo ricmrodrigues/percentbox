@@ -99,6 +99,14 @@ export function Footer() {
               </li>
               <li>
                 <Link
+                  href="/changelog"
+                  className="hover:text-emerald-600 dark:hover:text-emerald-400"
+                >
+                  What changed
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/privacy"
                   className="hover:text-emerald-600 dark:hover:text-emerald-400"
                 >

@@ -5,7 +5,9 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { JsonLd } from "@/components/JsonLd";
+import { EditorialMeta } from "@/components/EditorialMeta";
 import { ToolPageContent } from "@/components/ToolPageContent";
+import { toolUpdated } from "@/lib/site-meta";
 import { getToolEditorial } from "@/lib/tool-editorial";
 import {
   TOOLS,
@@ -81,8 +83,8 @@ export default async function ToolRoutePage({ params }: Props) {
     "@graph": [
       organizationJsonLd(),
       websiteJsonLd(),
-      softwareAppJsonLd(tool),
-      howToJsonLd(tool),
+      { ...softwareAppJsonLd(tool), dateModified: toolUpdated(tool.slug) },
+      howToJsonLd(tool, getToolEditorial(tool.slug)?.fields),
       faqJsonLd([
         ...tool.faqs,
         ...(getToolEditorial(tool.slug)?.faqs ?? []),
@@ -113,11 +115,11 @@ export default async function ToolRoutePage({ params }: Props) {
             <p className="mt-3 max-w-3xl text-base text-slate-600 dark:text-slate-400 sm:text-lg">
               {tool.intro}
             </p>
+            <EditorialMeta updated={toolUpdated(tool.slug)} />
           </div>
         </section>
 
         <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
-          <AdSlot slot="top" className="mb-6" />
           <ToolPageContent tool={tool} />
           <AdSlot slot="below" className="mt-10" />
         </div>

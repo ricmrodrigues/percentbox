@@ -1,9 +1,10 @@
 import type { MetadataRoute } from "next";
 import { GUIDES } from "@/content/guides";
 import { SITE_URL, TOOLS } from "@/lib/seo";
+import { SITE_LAST_UPDATED, toolUpdated } from "@/lib/site-meta";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const now = new Date();
+  const now = new Date(SITE_LAST_UPDATED);
 
   const staticPages: MetadataRoute.Sitemap = [
     {
@@ -23,6 +24,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: now,
       changeFrequency: "monthly",
       priority: 0.6,
+    },
+    {
+      url: `${SITE_URL}/changelog`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.5,
     },
     {
       url: `${SITE_URL}/contact`,
@@ -53,7 +60,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const toolPages: MetadataRoute.Sitemap = TOOLS.map((tool) => ({
     url: `${SITE_URL}/${tool.slug}`,
-    lastModified: now,
+    lastModified: new Date(toolUpdated(tool.slug)),
     changeFrequency: "weekly" as const,
     priority: 0.9,
   }));

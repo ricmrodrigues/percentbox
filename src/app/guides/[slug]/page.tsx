@@ -171,7 +171,7 @@ export default async function GuidePage({ params }: Props) {
             </section>
           )}
 
-          <RelatedTools />
+          <RelatedTools slugs={guide.relatedTools} />
           <p className="mt-8">
             <Link
               href="/guides"

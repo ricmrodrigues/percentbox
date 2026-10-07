@@ -130,7 +130,7 @@ Do not use it as a full costing model. Overhead, labor hours, waste, and unsold 
       "How compounding frequency and regular contributions change a balance, with a simple-interest contrast and the assumptions a calculator quietly makes.",
     published,
     updated,
-    relatedTools: ["compound-interest-calculator", "loan-calculator"],
+    relatedTools: ["cagr-calculator", "compound-interest-calculator", "loan-calculator"],
     relatedGuides: ["simple-vs-compound-interest", "effective-annual-rate"],
     faqs: [
       {
