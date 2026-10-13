@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { AffiliateSlot } from "@/components/AffiliateBox";
 import { AdSlot } from "@/components/AdSlot";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Footer } from "@/components/Footer";
@@ -121,6 +122,7 @@ export default async function ToolRoutePage({ params }: Props) {
 
         <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
           <ToolPageContent tool={tool} />
+          <AffiliateSlot slug={tool.slug} className="mt-10" />
           <AdSlot slot="below" className="mt-10" />
         </div>
       </main>

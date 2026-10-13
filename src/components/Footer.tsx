@@ -122,6 +122,14 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link
+                  href="/how-we-make-money"
+                  className="hover:text-emerald-600 dark:hover:text-emerald-400"
+                >
+                  How we make money
+                </Link>
+              </li>
+              <li>
                 <CookieSettingsButton className="hover:text-emerald-600 dark:hover:text-emerald-400" />
               </li>
               <li>
