@@ -20,7 +20,7 @@ export function AffiliateBox({ program }: { program: AffiliateProgram }) {
       <a
         href={url}
         target="_blank"
-        rel="sponsored noopener"
+        rel="sponsored nofollow noopener"
         className="mt-3 inline-block rounded-lg bg-emerald-600 px-3 py-1.5 font-medium text-white hover:bg-emerald-700"
       >
         {copy.cta} →
