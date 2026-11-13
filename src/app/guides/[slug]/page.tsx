@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { GUIDE_SNIPPETS } from "@/lib/search-snippets";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
@@ -33,18 +34,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const guide = getGuide(slug);
   if (!guide) return {};
   const url = absoluteUrl(`/guides/${guide.slug}`);
+  const snippet = GUIDE_SNIPPETS[guide.slug];
+  const title = snippet?.title ?? `${guide.title} | PercentBox`;
+  const description = snippet?.description ?? guide.description;
   return {
-    title: guide.title,
-    description: guide.description,
+    title: { absolute: title },
+    description,
     authors: [{ name: GUIDE_AUTHOR, url: absoluteUrl("/about") }],
     alternates: { canonical: url },
     openGraph: {
       type: "article",
       url,
-      title: guide.title,
-      description: guide.description,
+      title,
+      description,
       publishedTime: guide.published,
       modifiedTime: guide.updated,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
     },
   };
 }

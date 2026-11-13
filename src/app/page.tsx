@@ -3,6 +3,7 @@ import Link from "next/link";
 import { AdSlot } from "@/components/AdSlot";
 import { EditorialMeta } from "@/components/EditorialMeta";
 import { SITE_LAST_UPDATED } from "@/lib/site-meta";
+import { HOME_SNIPPET } from "@/lib/search-snippets";
 import { Calculator } from "@/components/Calculator";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
@@ -20,18 +21,20 @@ import {
 } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: {
-    absolute:
-      "Percentage Calculator — Free Online % Calculator | PercentBox",
-  },
-  description:
-    "Free percentage calculator online. What is X% of Y, percentage increase & decrease, tip calculator, and discount calculator. Instant results, mobile-friendly, no signup.",
+  title: { absolute: HOME_SNIPPET.title },
+  description: HOME_SNIPPET.description,
   alternates: { canonical: SITE_URL },
   openGraph: {
+    type: "website",
     url: SITE_URL,
-    title: "Percentage Calculator — Free Online % Calculator | PercentBox",
-    description:
-      "Calculate percentages instantly: X% of Y, percentage change, tips, and discounts. Clean, fast, and free.",
+    siteName: "PercentBox",
+    title: HOME_SNIPPET.title,
+    description: HOME_SNIPPET.description,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: HOME_SNIPPET.title,
+    description: HOME_SNIPPET.description,
   },
 };
 
@@ -48,7 +51,7 @@ export default function Home() {
         "@type": "WebPage",
         "@id": `${SITE_URL}/#webpage`,
         url: SITE_URL,
-        name: "Percentage Calculator — Free Online % Calculator | PercentBox",
+        name: HOME_SNIPPET.title,
         isPartOf: { "@id": `${SITE_URL}/#website` },
         about: { "@id": `${SITE_URL}/#webapp` },
         description:

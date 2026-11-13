@@ -9,6 +9,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { EditorialMeta } from "@/components/EditorialMeta";
 import { ToolPageContent } from "@/components/ToolPageContent";
 import { toolUpdated } from "@/lib/site-meta";
+import { TOOL_SNIPPETS } from "@/lib/search-snippets";
 import { getToolEditorial } from "@/lib/tool-editorial";
 import {
   TOOLS,
@@ -34,16 +35,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!tool) return {};
 
   const url = absoluteUrl(`/${tool.slug}`);
+  const snippet = TOOL_SNIPPETS[tool.slug];
+  const title = snippet?.title ?? `${tool.title} | PercentBox`;
+  const description = snippet?.description ?? tool.description;
   return {
-    title: tool.title,
-    description: tool.description,
+    title: { absolute: title },
+    description,
     keywords: tool.keywords,
     alternates: { canonical: url },
     openGraph: {
       type: "website",
       url,
-      title: tool.title,
-      description: tool.description,
+      title,
+      description,
       siteName: "PercentBox",
       images: [
         {
@@ -56,8 +60,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     twitter: {
       card: "summary",
-      title: tool.shortTitle,
-      description: tool.description,
+      title,
+      description,
       images: ["/logo.png"],
     },
     robots: {
