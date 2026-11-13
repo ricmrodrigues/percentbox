@@ -91,7 +91,7 @@ Use the forward tools to check: take your recovered original, apply the percent,
     published,
     updated,
     relatedTools: ["percentage-change-calculator", "percentage-increase-calculator"],
-    relatedGuides: ["percentage-increase-vs-percentage-points", "inflation-and-percent-change"],
+    relatedGuides: ["percentage-increase-vs-percentage-points", "inflation-and-percent-change", "percentage-word-problems"],
     faqs: [
       {
         q: "Which number do I divide by?",

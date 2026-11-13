@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Calculator } from "@/components/Calculator";
 import { RateLinks } from "@/components/RateLinks";
+import { ToolDeepDive } from "@/components/ToolDeepDive";
 import { CompoundInterestCalculator } from "@/components/calculators/CompoundInterestCalculator";
 import { LoanCalculator } from "@/components/calculators/LoanCalculator";
 import { MarkupCalculator } from "@/components/calculators/MarkupCalculator";
@@ -124,6 +125,8 @@ export function ToolPageContent({ tool }: { tool: ToolPage }) {
 
       {/* First ad unit sits below the calculator and its table, never above it. */}
       <AdSlot slot="top" />
+
+      <ToolDeepDive slug={tool.slug} />
 
       <section aria-labelledby="about-tool">
         <h2

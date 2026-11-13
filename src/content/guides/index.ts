@@ -4,6 +4,7 @@ import { financeGuides } from "./finance";
 import { moreGuidesA } from "./more-a";
 import { moreGuidesB } from "./more-b";
 import { priorityGuides } from "./priority";
+import { wordProblemGuides } from "./word-problems";
 import { GUIDE_AUTHOR, type Guide } from "./types";
 
 export { GUIDE_AUTHOR };
@@ -16,6 +17,7 @@ export const GUIDES: Guide[] = [
   ...financeGuides,
   ...moreGuidesA,
   ...moreGuidesB,
+  ...wordProblemGuides,
 ];
 
 const bySlug = new Map(GUIDES.map((guide) => [guide.slug, guide]));

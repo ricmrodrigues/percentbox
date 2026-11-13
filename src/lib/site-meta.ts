@@ -3,7 +3,12 @@
 export const SITE_LAST_UPDATED = "2026-10-07";
 
 /** Per-tool "last reviewed" date shown under the H1. */
-export const TOOL_UPDATED: Record<string, string> = {};
+export const TOOL_UPDATED: Record<string, string> = {
+  "percentage-increase-calculator": "2026-11-13",
+  "percentage-decrease-calculator": "2026-11-13",
+  "percentage-change-calculator": "2026-11-13",
+  "vat-calculator": "2026-11-13",
+};
 export function toolUpdated(slug: string): string {
   return TOOL_UPDATED[slug] ?? SITE_LAST_UPDATED;
 }
@@ -17,10 +22,13 @@ export interface ChangelogEntry {
 export const CHANGELOG: ChangelogEntry[] = [
   {
     date: "2026-11-13",
-    title: "Percent-of tables for common rates",
+    title: "Percent-of tables, deeper percentage pages, and a full VAT rates table",
     items: [
       "New: a page for each common rate from 5% to 90% (/percent-of), with the calculator preset to that rate, an exact table of “n% of”, “n% off” and “plus n%” for round numbers and prices, a mental-math shortcut, and the reverse calculations.",
       "The calculator now links to the matching table when you type one of those rates.",
+      "Percentage increase, decrease and change pages: worked A→B examples, word problems, working backwards, common mistakes, and percent change vs percentage points.",
+      "VAT page: the rates table now covers all 27 EU countries plus the UK, Norway, Switzerland and New Zealand, checked against official sources on 13 November 2026.",
+      "New guide: percentage word problems with worked answers.",
     ],
   },
   {

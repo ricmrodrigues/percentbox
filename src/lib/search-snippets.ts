@@ -75,6 +75,11 @@ export const TOOL_SNIPPETS: Record<string, SearchSnippet> = {
 
 /** Keyed by guide slug. */
 export const GUIDE_SNIPPETS: Record<string, SearchSnippet> = {
+  "percentage-word-problems": {
+    title: "Percentage Word Problems with Worked Answers | PercentBox",
+    description:
+      "12 worked problems: a bill up 15% (220,000 → 253,000), % change from 8 to 10 (25%), a 22% tip on $64 ($14.08), working backwards. Free, no signup.",
+  },
   "how-to-calculate-a-tip": {
     title: "How to Calculate a Tip: 15%, 18%, 20% Examples | PercentBox",
     description:

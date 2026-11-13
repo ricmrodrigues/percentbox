@@ -5,6 +5,7 @@ export const depthChange: Record<string, EditorialDepth> = {
     relatedGuides: [
       "percentage-increase-vs-percentage-points",
       "inflation-and-percent-change",
+      "percentage-word-problems",
     ],
     audience: [
       "This page is for a rate you already know and a starting amount you want to grow. A salary offer, a price “plus 8%,” a population projection in a textbook, a fee that increases by a stated percent. The output is the new amount and the size of the piece that was added. The page opens with Increase selected. Decrease is the other button in the same mode, and it is a different operation.",
@@ -79,6 +80,7 @@ export const depthChange: Record<string, EditorialDepth> = {
       "how-to-calculate-discounts",
       "stacked-discounts",
       "common-percentage-mistakes",
+      "percentage-word-problems",
     ],
     audience: [
       "Use this when one rate comes off one starting value: a single markdown, a budget cut, a “down 15%,” a forecast that says the figure will be lower by a stated percent. You want both the remainder and the size of the cut. The page opens with Decrease selected so a sale-style question does not accidentally add.",
@@ -154,8 +156,10 @@ export const depthChange: Record<string, EditorialDepth> = {
   },
   "percentage-change-calculator": {
     relatedGuides: [
+      "percentage-change-from-a-to-b",
       "inflation-and-percent-change",
       "percentage-increase-vs-percentage-points",
+      "percentage-word-problems",
     ],
     audience: [
       "This page starts from two measurements of the same thing. A price last month and a price now, a weight before and after, a bill this year and last year, a score on the same scale. You do not know the rate yet. The rate is the output. Put the reference measurement in From, even when it is the larger one. The sign of the result is the direction.",

@@ -1,4 +1,11 @@
 import Link from "next/link";
+import {
+  EU_VAT_RATES,
+  OTHER_VAT_RATES,
+  VAT_RATES_CHECKED,
+  VAT_SOURCES,
+  type VatRateRow,
+} from "@/content/vat-rates";
 import { formatNum } from "@/lib/phase-a";
 
 /**
@@ -100,22 +107,24 @@ function tablesFor(slug: string): Table[] {
       ];
     }
     case "vat-calculator": {
+      const fmtRates = (r: number[]) => (r.length ? r.map((x) => `${formatNum(x, 2)}%`).join(", ") : "—");
+      const toRow = (v: VatRateRow) => [
+        v.country,
+        `${formatNum(v.standard, 2)}%`,
+        fmtRates(v.other),
+        `${r2((v.standard / (100 + v.standard)) * 100)}%`,
+      ];
       return [
         {
-          caption: "Standard VAT rates used in the presets (checked 7 October 2026)",
-          head: ["Country / region", "Standard", "Reduced rates", "VAT share of a gross price"],
-          rows: [
-            ["Portugal (mainland)", "23%", "13%, 6%", `${r2((23 / 123) * 100)}%`],
-            ["Portugal (Madeira)", "22%", "12%, 4%", `${r2((22 / 122) * 100)}%`],
-            ["Portugal (Azores)", "16%", "9%, 4%", `${r2((16 / 116) * 100)}%`],
-            ["Spain", "21%", "10%, 4%", `${r2((21 / 121) * 100)}%`],
-            ["France", "20%", "10%, 5.5%, 2.1%", `${r2((20 / 120) * 100)}%`],
-            ["Germany", "19%", "7%", `${r2((19 / 119) * 100)}%`],
-            ["Italy", "22%", "10%, 5%, 4%", `${r2((22 / 122) * 100)}%`],
-            ["Ireland", "23%", "13.5%, 9%, 4.8%", `${r2((23 / 123) * 100)}%`],
-            ["Netherlands", "21%", "9%", `${r2((21 / 121) * 100)}%`],
-            ["United Kingdom", "20%", "5%, 0%", `${r2((20 / 120) * 100)}%`],
-          ],
+          caption: `Standard VAT rates in the EU (checked ${VAT_RATES_CHECKED})`,
+          head: ["Country", "Standard", "Other rates", "VAT share of a gross price"],
+          rows: EU_VAT_RATES.map(toRow),
+          note: "“Other rates” lists reduced, super-reduced and parking rates. The VAT share is how much of a VAT-inclusive price is tax at the standard rate (rate ÷ (100 + rate)), rounded to two decimals.",
+        },
+        {
+          caption: `Portuguese islands, the UK and other countries (checked ${VAT_RATES_CHECKED})`,
+          head: ["Country / region", "Standard", "Other rates", "VAT share of a gross price"],
+          rows: OTHER_VAT_RATES.map(toRow),
           note: "Which rate applies depends on the product or service and on place-of-supply rules. Always confirm with the tax authority before invoicing.",
         },
       ];
@@ -194,12 +203,7 @@ function tablesFor(slug: string): Table[] {
 }
 
 const SOURCES: Record<string, { label: string; href: string }[]> = {
-  "vat-calculator": [
-    { label: "European Commission — Your Europe: VAT rates applied in EU member countries", href: "https://europa.eu/youreurope/business/finance-and-tax/vat/vat-rules-rates/index_en.htm" },
-    { label: "Portal das Finanças — Código do IVA, artigo 18.º (mainland rates 23% / 13% / 6%)", href: "https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/civa_rep/Pages/iva18.aspx" },
-    { label: "Autoridade Tributária — Ofício Circulado 25045/2024 (Açores 16% / 9% / 4%; Madeira 22% / 12% / 4% since 1 Oct 2024)", href: "https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/legislacao/instrucoes_administrativas/Documents/Oficio_circulado_25045_2024.pdf" },
-    { label: "GOV.UK — VAT rates", href: "https://www.gov.uk/guidance/rates-of-vat-on-different-goods-and-services" },
-  ],
+  "vat-calculator": VAT_SOURCES,
 };
 
 export function ToolExtras({ slug }: { slug: string }) {
@@ -209,7 +213,7 @@ export function ToolExtras({ slug }: { slug: string }) {
   return (
     <section aria-labelledby="comparison-heading">
       <h2 id="comparison-heading" className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
-        Comparison table
+        {slug === "vat-calculator" ? "VAT rates by country" : "Comparison table"}
       </h2>
       {tables.map((t) => (
         <div key={t.caption} className="mt-4">
