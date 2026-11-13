@@ -20,7 +20,7 @@ function GaRouteListener() {
 
 /**
  * App Router page views. The gtag library itself is injected by the consent
- * bootstrap in the root layout (only when non-essential scripts are allowed).
+ * bootstrap in the root layout; Consent Mode (set by Google's CMP) governs it.
  * No-ops when NEXT_PUBLIC_GA_MEASUREMENT_ID is unset.
  */
 export function GoogleAnalytics() {

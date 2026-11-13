@@ -104,8 +104,8 @@ export default function ContactPage() {
                   <strong className="text-slate-800 dark:text-slate-200">
                     Privacy.
                   </strong>{" "}
-                  Put “Privacy” in the subject. Questions about the consent
-                  banner, analytics, or ads are answered against the{" "}
+                  Put “Privacy” in the subject. Questions about consent,
+                  analytics, or ads are answered against the{" "}
                   <Link
                     href="/privacy"
                     className="font-medium text-emerald-700 underline dark:text-emerald-400"

@@ -1,62 +1,25 @@
 import { ADSENSE_CLIENT, isAdsenseEnabled } from "@/lib/adsense";
 import { GA_MEASUREMENT_ID, isGaEnabled } from "@/lib/analytics";
 
-export const CONSENT_COOKIE = "pb_consent";
-export const CONSENT_MAX_AGE_SECONDS = 60 * 60 * 24 * 180;
-
 /**
- * EEA member states, the UK, and Switzerland.
- * Used as a language-region hint, not a geo IP lookup.
- * Switzerland is included because Google's EU user-consent policy covers it.
+ * Regions where Google Consent Mode defaults to "denied" until Google's CMP
+ * (AdSense Privacy & messaging / Funding Choices) records a choice:
+ * EEA member states, the UK, and Switzerland (ISO 3166-1 alpha-2).
+ * Google resolves the visitor's region itself (IP-based), so no client-side
+ * geo guess is needed here.
  */
-export const EEA_UK_REGIONS = [
-  "AT",
-  "BE",
-  "BG",
-  "HR",
-  "CY",
-  "CZ",
-  "DK",
-  "EE",
-  "FI",
-  "FR",
-  "DE",
-  "GR",
-  "HU",
-  "IE",
-  "IT",
-  "LV",
-  "LT",
-  "LU",
-  "MT",
-  "NL",
-  "PL",
-  "PT",
-  "RO",
-  "SK",
-  "SI",
-  "ES",
-  "SE",
-  "IS",
-  "LI",
-  "NO",
-  "GB",
-  "UK",
-  "CH",
+export const CONSENT_REQUIRED_REGIONS = [
+  "AT", "BE", "BG", "HR", "CY", "CZ", "DK", "EE", "FI", "FR", "DE", "GR",
+  "HU", "IE", "IT", "LV", "LT", "LU", "MT", "NL", "PL", "PT", "RO", "SK",
+  "SI", "ES", "SE", "IS", "LI", "NO", "GB", "CH",
 ] as const;
-
-export type ConsentChoice = "accepted" | "rejected";
-
-export interface PbConsentState {
-  choice: ConsentChoice | null;
-  eea: boolean;
-  allow: boolean;
-}
 
 declare global {
   interface Window {
-    __pbConsent?: PbConsentState;
-    __pbApplyConsent?: (choice: ConsentChoice) => void;
+    googlefc?: {
+      callbackQueue?: Array<(() => void) | Record<string, () => void>>;
+      showRevocationMessage?: () => void;
+    };
   }
 }
 
@@ -66,15 +29,17 @@ function safeToken(value: string): string {
 
 /**
  * Inline head bootstrap. Runs synchronously before the static adsbygoogle.js
- * tag that follows it in the layout.
+ * tag that follows it in the layout, so the Consent Mode v2 defaults exist
+ * before any Google tag reads them.
  *
- * The ad library itself is not injected here. Ad *requests* are paused with
- * pauseAdRequests until this browser is allowed to be served ads: Accept, a
- * stored Accept, or a non-EEA/UK/Switzerland visitor who has not rejected.
- * Reject leaves requests paused. Google Analytics stays fully gated.
+ * Consent is collected by Google's own certified CMP (AdSense Privacy &
+ * messaging, served by adsbygoogle.js), which writes the TCF string and sends
+ * the Consent Mode "update". There is no first-party banner.
  *
- * Google's ad crawlers are unpaused so a bot that executes this script can
- * request ads. They are not people and no consent cookie is written for them.
+ * - Default: denied for ad_storage, ad_user_data, ad_personalization and
+ *   analytics_storage in CONSENT_REQUIRED_REGIONS; granted elsewhere.
+ * - GA4 (when configured) always loads and follows Consent Mode: with
+ *   analytics_storage denied it sets no cookies and sends cookieless pings.
  *
  * next/script is intentionally not used for adsbygoogle.js: it adds
  * data-nscript, which AdSense rejects on the head tag.
@@ -84,108 +49,42 @@ export function consentBootstrapScript(): string {
   const gaId = isGaEnabled ? safeToken(GA_MEASUREMENT_ID) : "";
 
   return `(function(){
-  var COOKIE=${JSON.stringify(CONSENT_COOKIE)};
-  var MAX_AGE=${CONSENT_MAX_AGE_SECONDS};
-  var EEA=${JSON.stringify([...EEA_UK_REGIONS])};
+  var REGIONS=${JSON.stringify([...CONSENT_REQUIRED_REGIONS])};
   var ADS=${JSON.stringify(adsClient)};
   var GA=${JSON.stringify(gaId)};
-  function readChoice(){
-    try {
-      var m=document.cookie.match(new RegExp("(?:^|; )"+COOKIE+"=(accepted|rejected)(?:;|$)"));
-      return m?m[1]:null;
-    } catch(e){ return null; }
-  }
-  function isAdsCrawler(){
-    var ua=navigator.userAgent||"";
-    return ua.indexOf("Mediapartners-Google")!==-1
-      || ua.indexOf("Google-Display-Ads-Bot")!==-1
-      || ua.indexOf("AdsBot-Google")!==-1;
-  }
-  function isEea(){
-    var tz="";
-    try { tz=Intl.DateTimeFormat().resolvedOptions().timeZone||""; } catch(e){}
-    if (tz.indexOf("Europe/")===0) return true;
-    if (tz==="Atlantic/Azores"||tz==="Atlantic/Madeira"||tz==="Atlantic/Canary"||tz==="Atlantic/Faroe"||tz==="Atlantic/Reykjavik") return true;
-    var lang=(navigator.language||"");
-    var parts=lang.split("-");
-    var region=(parts.length>1?parts[parts.length-1]:"").toUpperCase();
-    for (var i=0;i<EEA.length;i++){ if (EEA[i]===region) return true; }
-    return false;
-  }
-  function gtag(){ window.dataLayer.push(arguments); }
   window.dataLayer=window.dataLayer||[];
+  function gtag(){ window.dataLayer.push(arguments); }
   if (!window.gtag) window.gtag=gtag;
-  function applyConsentMode(granted){
-    window.gtag("consent", window.__pbConsentBooted ? "update" : "default", {
-      ad_storage: granted ? "granted" : "denied",
-      ad_user_data: granted ? "granted" : "denied",
-      ad_personalization: granted ? "granted" : "denied",
-      analytics_storage: granted ? "granted" : "denied",
-      functionality_storage: "granted",
-      security_storage: "granted",
-      wait_for_update: 500
-    });
-    window.__pbConsentBooted=true;
-  }
-  function inject(src){
-    if (document.querySelector('script[src="'+src+'"]')) return;
+  window.gtag("consent","default",{
+    ad_storage:"granted",
+    ad_user_data:"granted",
+    ad_personalization:"granted",
+    analytics_storage:"granted",
+    functionality_storage:"granted",
+    security_storage:"granted"
+  });
+  window.gtag("consent","default",{
+    ad_storage:"denied",
+    ad_user_data:"denied",
+    ad_personalization:"denied",
+    analytics_storage:"denied",
+    functionality_storage:"granted",
+    security_storage:"granted",
+    region:REGIONS,
+    wait_for_update:500
+  });
+  window.gtag("set","ads_data_redaction",true);
+  if (GA){
     var s=document.createElement("script");
     s.async=true;
-    s.src=src;
+    s.src="https://www.googletagmanager.com/gtag/js?id="+encodeURIComponent(GA);
     document.head.appendChild(s);
-  }
-  function enableGa(){
-    if (!GA || document.querySelector('script[src*="googletagmanager.com/gtag/js"]')) return;
-    inject("https://www.googletagmanager.com/gtag/js?id="+encodeURIComponent(GA));
     window.gtag("js", new Date());
-    window.gtag("config", GA, {
-      send_page_view: false,
-      anonymize_ip: true,
-      cookie_flags: "SameSite=None;Secure"
-    });
+    window.gtag("config", GA, { send_page_view: false });
   }
-  var autoAdsQueued=false;
-  function queueAutoAds(){
-    if (!ADS || autoAdsQueued) return;
-    autoAdsQueued=true;
+  if (ADS){
     var q=window.adsbygoogle=window.adsbygoogle||[];
     try { q.push({google_ad_client: ADS, enable_page_level_ads: true}); } catch(e){}
   }
-  function setAdPause(paused){
-    var q=window.adsbygoogle=window.adsbygoogle||[];
-    q.pauseAdRequests=paused?1:0;
-  }
-  window.__pbApplyConsent=function(choice){
-    var wasServing=!!(window.__pbConsent&&window.__pbConsent.allow);
-    document.cookie=COOKIE+"="+choice+"; Path=/; Max-Age="+MAX_AGE+"; SameSite=Lax";
-    var granted=choice==="accepted";
-    var eea=isEea();
-    window.__pbConsent={ choice: choice, eea: eea, allow: granted };
-    applyConsentMode(granted);
-    setAdPause(!granted);
-    if (granted) enableGa();
-    try { window.dispatchEvent(new Event("pb-consent")); } catch(e){}
-    if (!granted && (wasServing || document.querySelector('script[src*="googletagmanager.com/gtag"]'))){
-      window.location.reload();
-    }
-  };
-  var choice=readChoice();
-  var eea=isEea();
-  var crawler=isAdsCrawler();
-  var humanAllow=choice==="accepted" || (choice!=="rejected" && !eea);
-  var serveAds=humanAllow || crawler;
-  window.__pbConsent={ choice: choice, eea: eea, allow: humanAllow && !crawler };
-  // Show the server-rendered banner from the first paint (CSS keys off these
-  // classes) instead of mounting it after hydration, which made it a late LCP.
-  try {
-    var de=document.documentElement;
-    if (!choice) de.classList.add("pb-consent-open");
-    if (eea) de.classList.add("pb-eea");
-  } catch(e){}
-  setAdPause(true);
-  queueAutoAds();
-  if (serveAds) setAdPause(false);
-  applyConsentMode(serveAds);
-  if (humanAllow && !crawler) enableGa();
 })();`;
 }

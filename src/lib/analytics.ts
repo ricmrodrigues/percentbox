@@ -19,11 +19,10 @@ declare global {
 
 function gtag(...args: unknown[]) {
   if (typeof window === "undefined" || !window.gtag) return;
-  if (window.__pbConsent && !window.__pbConsent.allow) return;
   window.gtag(...args);
 }
 
-/** SPA page view (App Router). Skipped when non-essential consent is denied. */
+/** SPA page view (App Router). Consent Mode decides what GA stores/sends. */
 export function trackPageView(url: string, title?: string) {
   if (!isGaEnabled) return;
   gtag("event", "page_view", {

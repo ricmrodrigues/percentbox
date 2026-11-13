@@ -65,8 +65,8 @@ export default function HowWeMakeMoneyPage() {
             <p>
               Some pages show ads served by Google AdSense. We don&apos;t pick
               the individual ads and don&apos;t endorse what they sell. In the
-              EEA, the UK and Switzerland, ads only load after you accept
-              non-essential cookies. See the{" "}
+              EEA, the UK and Switzerland, Google&apos;s consent message asks
+              before ad cookies are used or ads are personalized. See the{" "}
               <Link href="/privacy" className={link}>privacy policy</Link>.
             </p>
             <h2 className={h2}>Affiliate links</h2>

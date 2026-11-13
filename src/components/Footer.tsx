@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CookieSettingsButton } from "@/components/ConsentBanner";
+import { PrivacySettingsLink } from "@/components/PrivacySettingsLink";
 import { TOOLS } from "@/lib/seo";
 
 export function Footer() {
@@ -138,7 +138,7 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <CookieSettingsButton className="hover:text-emerald-600 dark:hover:text-emerald-400" />
+                <PrivacySettingsLink className="hover:text-emerald-600 dark:hover:text-emerald-400" />
               </li>
               <li>
                 <a

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import {
   ADSENSE_CLIENT,
   ADSENSE_SLOTS,
@@ -28,22 +28,14 @@ const MIN_HEIGHT: Record<AdPlacement, string> = {
 };
 
 /**
- * Manual display unit when a data-ad-slot ID is configured AND the visitor
- * has allowed non-essential scripts. Empty slot env vars render nothing —
+ * Manual display unit when a data-ad-slot ID is configured. Consent is handled
+ * by Google's CMP (TCF + Consent Mode). Empty slot env vars render nothing —
  * Auto ads come from the publisher script, not from placeholder boxes.
  */
 export function AdSlot({ slot, className = "" }: AdSlotProps) {
   const pushed = useRef(false);
   const unitId = ADSENSE_SLOTS[slot];
-  const [allow, setAllow] = useState(false);
-  const useManual = isAdsenseEnabled && hasManualSlot(slot) && allow;
-
-  useEffect(() => {
-    const sync = () => setAllow(Boolean(window.__pbConsent?.allow));
-    sync();
-    window.addEventListener("pb-consent", sync);
-    return () => window.removeEventListener("pb-consent", sync);
-  }, []);
+  const useManual = isAdsenseEnabled && hasManualSlot(slot);
 
   useEffect(() => {
     if (!useManual || pushed.current) return;

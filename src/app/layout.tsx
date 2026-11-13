@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
-import { ConsentBanner } from "@/components/ConsentBanner";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { InstallHint } from "@/components/InstallHint";
 import { JsonLd } from "@/components/JsonLd";
@@ -139,9 +138,9 @@ const themeScript = `
 /**
  * Consent bootstrap, then the static AdSense library tag.
  * A React <script src> is hoisted above inline scripts, so a cached
- * adsbygoogle.js can fire requests before pauseAdRequests exists. Closing
+ * adsbygoogle.js could run before the Consent Mode defaults exist. Closing
  * the inline script and opening the library tag in the same HTML string
- * keeps the pause flag first. The client id is already constrained to
+ * keeps the defaults first. The client id is already constrained to
  * ca-pub-[0-9]+.
  */
 function consentAndAdsenseHeadHtml(): string {
@@ -180,7 +179,6 @@ export default function RootLayout({
         <GoogleAnalytics />
         <InstallHint />
         {children}
-        <ConsentBanner />
         <Analytics />
       </body>
     </html>

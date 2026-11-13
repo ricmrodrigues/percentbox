@@ -198,12 +198,10 @@ export default function AboutPage() {
             <p>
               The site may show ads through Google AdSense so the tools can stay
               free, and it may use Google Analytics 4 to see which pages are
-              actually used. The AdSense library tag is on the page whenever
-              ads are enabled. A first-party banner still decides whether ad
-              requests are allowed to run. Visitors whose browser looks like
-              the EEA, the UK, or Switzerland do not get analytics or ad
-              requests until they accept. Details, including what this banner
-              is not, are in the{" "}
+              actually used. Consent is collected by Google’s own consent
+              message: visitors in the EEA, the UK, and Switzerland are asked
+              before ad or analytics cookies are used, and Google Consent Mode
+              starts as denied there until they choose. Details are in the{" "}
               <Link
                 href="/privacy"
                 className="font-medium text-emerald-700 underline dark:text-emerald-400"
