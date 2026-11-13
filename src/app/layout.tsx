@@ -93,13 +93,8 @@ export const metadata: Metadata = {
       "max-video-preview": -1,
     },
   },
-  alternates: {
-    canonical: SITE_URL,
-    languages: {
-      "en-US": SITE_URL,
-      en: SITE_URL,
-    },
-  },
+  // No site-wide canonical or hreflang: every page sets its own canonical, and
+  // an inherited one would point 404s at the homepage. English only, so no hreflang.
   category: "utilities",
   // iOS home-screen / standalone web app behavior
   appleWebApp: {

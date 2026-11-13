@@ -3,57 +3,56 @@ import { GUIDES } from "@/content/guides";
 import { RATE_PAGES_UPDATED } from "@/content/rates";
 import { RATE_SLUGS, ratePath } from "@/lib/rates";
 import { SITE_URL, TOOLS } from "@/lib/seo";
-import { SITE_LAST_UPDATED, toolUpdated } from "@/lib/site-meta";
+import { pageUpdated, toolUpdated } from "@/lib/site-meta";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const now = new Date(SITE_LAST_UPDATED);
 
   const staticPages: MetadataRoute.Sitemap = [
     {
       url: SITE_URL,
-      lastModified: now,
+      lastModified: new Date(pageUpdated("/")),
       changeFrequency: "weekly",
       priority: 1,
     },
     {
       url: `${SITE_URL}/guides`,
-      lastModified: now,
+      lastModified: new Date(pageUpdated("/guides")),
       changeFrequency: "weekly",
       priority: 0.85,
     },
     {
       url: `${SITE_URL}/about`,
-      lastModified: now,
+      lastModified: new Date(pageUpdated("/about")),
       changeFrequency: "monthly",
       priority: 0.6,
     },
     {
       url: `${SITE_URL}/changelog`,
-      lastModified: now,
+      lastModified: new Date(pageUpdated("/changelog")),
       changeFrequency: "monthly",
       priority: 0.5,
     },
     {
       url: `${SITE_URL}/contact`,
-      lastModified: now,
+      lastModified: new Date(pageUpdated("/contact")),
       changeFrequency: "yearly",
       priority: 0.5,
     },
     {
       url: `${SITE_URL}/privacy`,
-      lastModified: now,
+      lastModified: new Date(pageUpdated("/privacy")),
       changeFrequency: "yearly",
       priority: 0.4,
     },
     {
       url: `${SITE_URL}/how-we-make-money`,
-      lastModified: now,
+      lastModified: new Date(pageUpdated("/how-we-make-money")),
       changeFrequency: "yearly",
       priority: 0.4,
     },
     {
       url: `${SITE_URL}/terms`,
-      lastModified: now,
+      lastModified: new Date(pageUpdated("/terms")),
       changeFrequency: "yearly",
       priority: 0.4,
     },

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Link from "next/link";
 
 /**
@@ -8,34 +8,27 @@ import Link from "next/link";
  * banner gates ad requests (pauseAdRequests) and Google Analytics.
  */
 export function ConsentBanner() {
-  const [open, setOpen] = useState(false);
-  const [eea, setEea] = useState(false);
-
   useEffect(() => {
-    const sync = () => {
-      const state = window.__pbConsent;
-      setEea(Boolean(state?.eea));
-      setOpen(!state?.choice);
-    };
-    sync();
-    const reopen = () => setOpen(true);
+    const reopen = () => document.documentElement.classList.add("pb-consent-open");
     window.addEventListener("pb-consent-open", reopen);
     return () => window.removeEventListener("pb-consent-open", reopen);
   }, []);
 
-  if (!open) return null;
-
   const choose = (choice: "accepted" | "rejected") => {
     window.__pbApplyConsent?.(choice);
-    setOpen(false);
+    document.documentElement.classList.remove("pb-consent-open");
   };
 
+  // Always in the server HTML; visibility comes from the html classes set by
+  // the consent bootstrap script in <head> (see globals.css), so the banner
+  // paints with the page instead of after hydration.
   return (
     <div
+      id="pb-consent"
       role="dialog"
       aria-labelledby="consent-title"
       aria-describedby="consent-desc"
-      className="fixed inset-x-0 bottom-0 z-50 border-t border-slate-200 bg-white/95 p-4 shadow-2xl backdrop-blur-md dark:border-slate-700 dark:bg-slate-950/95 sm:p-5"
+      className="pb-consent fixed inset-x-0 bottom-0 z-50 border-t border-slate-200 bg-white/95 p-4 shadow-2xl backdrop-blur-md dark:border-slate-700 dark:bg-slate-950/95 sm:p-5"
     >
       <div className="mx-auto flex max-w-6xl flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div className="max-w-3xl">
@@ -49,9 +42,12 @@ export function ConsentBanner() {
             id="consent-desc"
             className="mt-1 text-sm leading-relaxed text-slate-600 dark:text-slate-400"
           >
-            {eea
-              ? "Analytics stays off, and ad requests stay paused, until you accept. Essential storage (theme and the calculations you choose to keep on this device) is unaffected."
-              : "We use optional analytics and ads to keep the calculators free. Reject non-essential cookies if you would rather not load them."}{" "}
+            <span className="pb-consent-eea">
+              Analytics stays off, and ad requests stay paused, until you accept. Essential storage (theme and the calculations you choose to keep on this device) is unaffected.
+            </span>
+            <span className="pb-consent-row">
+              We use optional analytics and ads to keep the calculators free. Reject non-essential cookies if you would rather not load them.
+            </span>{" "}
             Details are in the{" "}
             <Link
               href="/privacy"

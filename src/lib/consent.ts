@@ -175,6 +175,13 @@ export function consentBootstrapScript(): string {
   var humanAllow=choice==="accepted" || (choice!=="rejected" && !eea);
   var serveAds=humanAllow || crawler;
   window.__pbConsent={ choice: choice, eea: eea, allow: humanAllow && !crawler };
+  // Show the server-rendered banner from the first paint (CSS keys off these
+  // classes) instead of mounting it after hydration, which made it a late LCP.
+  try {
+    var de=document.documentElement;
+    if (!choice) de.classList.add("pb-consent-open");
+    if (eea) de.classList.add("pb-eea");
+  } catch(e){}
   setAdPause(true);
   queueAutoAds();
   if (serveAds) setAdPause(false);

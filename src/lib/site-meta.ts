@@ -2,6 +2,16 @@
 
 export const SITE_LAST_UPDATED = "2026-10-07";
 
+/** Sitemap lastmod for static pages whose HTML changed after SITE_LAST_UPDATED. */
+export const PAGE_UPDATED: Record<string, string> = {
+  "/": "2026-11-13", // percent-of table links in the sidebar
+  "/guides": "2026-11-13", // new word-problems guide listed
+  "/changelog": "2026-11-13",
+};
+export function pageUpdated(path: string): string {
+  return PAGE_UPDATED[path] ?? SITE_LAST_UPDATED;
+}
+
 /** Per-tool "last reviewed" date shown under the H1. */
 export const TOOL_UPDATED: Record<string, string> = {
   "percentage-increase-calculator": "2026-11-13",

@@ -67,6 +67,19 @@ function NumberInput({
   suffix?: string;
   autoFocus?: boolean;
 }) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  // Focus the first field only when it is already on screen and the device
+  // has a fine pointer: a native autoFocus scrolled tool pages past their
+  // intro on load (and stopped Chrome reporting LCP) and opened the phone
+  // keyboard over the page.
+  useEffect(() => {
+    if (!autoFocus) return;
+    const el = inputRef.current;
+    if (!el || !window.matchMedia("(pointer: fine)").matches) return;
+    const r = el.getBoundingClientRect();
+    if (r.top >= 0 && r.bottom <= window.innerHeight) el.focus({ preventScroll: true });
+  }, [autoFocus]);
+
   return (
     <div className="flex flex-col gap-1.5">
       <label
@@ -86,7 +99,7 @@ function NumberInput({
           type="text"
           inputMode="decimal"
           autoComplete="off"
-          autoFocus={autoFocus}
+          ref={inputRef}
           value={value}
           onChange={(e) => {
             const raw = e.target.value.replace(/,/g, "");

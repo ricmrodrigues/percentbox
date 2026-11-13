@@ -60,3 +60,21 @@ input[type="text"] {
     font-size: 1.125rem;
   }
 }
+
+/* Consent banner visibility is driven by classes the <head> bootstrap script
+   puts on <html>, so the banner renders with the first paint. */
+.pb-consent {
+  display: none;
+}
+html.pb-consent-open .pb-consent {
+  display: block;
+}
+.pb-consent-eea {
+  display: none;
+}
+html.pb-eea .pb-consent-eea {
+  display: inline;
+}
+html.pb-eea .pb-consent-row {
+  display: none;
+}
