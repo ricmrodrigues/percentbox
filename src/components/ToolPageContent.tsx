@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Calculator } from "@/components/Calculator";
+import { RateLinks } from "@/components/RateLinks";
 import { CompoundInterestCalculator } from "@/components/calculators/CompoundInterestCalculator";
 import { LoanCalculator } from "@/components/calculators/LoanCalculator";
 import { MarkupCalculator } from "@/components/calculators/MarkupCalculator";
@@ -57,6 +58,12 @@ function guidesFor(editorial: ToolEditorial) {
   }
   return guides;
 }
+
+const RATE_LINK_TOOLS = new Set([
+  "what-is-x-percent-of-y",
+  "percentage-calculator",
+  "discount-calculator",
+]);
 
 const PAGE_LINKS = [
   ["#who-its-for", "Who it’s for"],
@@ -358,6 +365,8 @@ export function ToolPageContent({ tool }: { tool: ToolPage }) {
           </ul>
         </section>
       )}
+
+      {RATE_LINK_TOOLS.has(tool.slug) && <RateLinks heading="Tables for common rates" />}
 
       <RelatedTools currentSlug={tool.slug} />
     </div>

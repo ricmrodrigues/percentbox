@@ -16,6 +16,14 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    date: "2026-11-13",
+    title: "Percent-of tables for common rates",
+    items: [
+      "New: a page for each common rate from 5% to 90% (/percent-of), with the calculator preset to that rate, an exact table of “n% of”, “n% off” and “plus n%” for round numbers and prices, a mental-math shortcut, and the reverse calculations.",
+      "The calculator now links to the matching table when you type one of those rates.",
+    ],
+  },
+  {
     date: "2026-10-07",
     title: "Step-by-step working, shareable results, and three new tools",
     items: [

@@ -105,6 +105,24 @@ export function ToolsNav() {
                 </Link>
               </li>
             ))}
+            <li className="border-t border-slate-100 dark:border-slate-800">
+              <Link
+                role="menuitem"
+                href="/percent-of"
+                onClick={() => {
+                  trackEvent("nav_tool_click", { tool_slug: "percent-of" });
+                  setOpen(false);
+                }}
+                className="block px-4 py-2.5 text-left transition hover:bg-emerald-50 dark:hover:bg-emerald-950/40"
+              >
+                <span className="block text-sm font-semibold text-slate-900 dark:text-white">
+                  Percent-of tables (5%–90%)
+                </span>
+                <span className="mt-0.5 line-clamp-1 block text-xs text-slate-500 dark:text-slate-400">
+                  n% of, n% off and plus n% for common numbers and prices
+                </span>
+              </Link>
+            </li>
           </ul>
         </div>
       )}

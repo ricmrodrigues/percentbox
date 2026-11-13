@@ -63,11 +63,8 @@ const nextConfig: NextConfig = {
         destination: "/percentage-calculator",
         permanent: true,
       },
-      {
-        source: "/percent-of",
-        destination: "/what-is-x-percent-of-y",
-        permanent: true,
-      },
+      // "/percent-of" used to redirect to /what-is-x-percent-of-y; it is now
+      // the index of the /percent-of/{rate} table pages.
       {
         source: "/percent-increase",
         destination: "/percentage-increase-calculator",

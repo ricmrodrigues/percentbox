@@ -1,5 +1,7 @@
 import type { MetadataRoute } from "next";
 import { GUIDES } from "@/content/guides";
+import { RATE_PAGES_UPDATED } from "@/content/rates";
+import { RATE_SLUGS, ratePath } from "@/lib/rates";
 import { SITE_URL, TOOLS } from "@/lib/seo";
 import { SITE_LAST_UPDATED, toolUpdated } from "@/lib/site-meta";
 
@@ -71,5 +73,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.9,
   }));
 
-  return [...staticPages, ...guidePages, ...toolPages];
+  const rateUpdated = new Date(RATE_PAGES_UPDATED);
+  const ratePages: MetadataRoute.Sitemap = [
+    {
+      url: `${SITE_URL}/percent-of`,
+      lastModified: rateUpdated,
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    },
+    ...RATE_SLUGS.map((rate) => ({
+      url: `${SITE_URL}${ratePath(rate)}`,
+      lastModified: rateUpdated,
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    })),
+  ];
+
+  return [...staticPages, ...guidePages, ...toolPages, ...ratePages];
 }

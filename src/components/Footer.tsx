@@ -83,6 +83,14 @@ export function Footer() {
               </li>
               <li>
                 <Link
+                  href="/percent-of"
+                  className="hover:text-emerald-600 dark:hover:text-emerald-400"
+                >
+                  Percent-of tables
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/about"
                   className="hover:text-emerald-600 dark:hover:text-emerald-400"
                 >

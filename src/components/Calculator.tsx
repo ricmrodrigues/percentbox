@@ -19,6 +19,9 @@ import {
   stepsFor,
   tipCalc,
 } from "@/lib/calculations";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { matchRate, ratePath } from "@/lib/rates";
 import { useCopyLink, useShareableParams } from "@/lib/share";
 import {
   type HistoryItem,
@@ -143,13 +146,19 @@ function QuickButtons({
 export function Calculator({
   initialMode = "percent-of",
   initialDirection = "increase",
+  initialA = "",
+  initialB = "",
 }: {
   initialMode?: CalculatorMode;
   initialDirection?: "increase" | "decrease";
+  /** Preset first input (e.g. the rate on /percent-of/{rate} pages). */
+  initialA?: string;
+  initialB?: string;
 } = {}) {
+  const pathname = usePathname();
   const [mode, setMode] = useState<CalculatorMode>(initialMode);
-  const [a, setA] = useState("");
-  const [b, setB] = useState("");
+  const [a, setA] = useState(initialA);
+  const [b, setB] = useState(initialB);
   const [direction, setDirection] = useState<"increase" | "decrease">(
     initialDirection
   );
@@ -172,7 +181,9 @@ export function Calculator({
     // eslint-disable-next-line react-hooks/set-state-in-effect -- sync props from the route
     setMode(initialMode);
     setDirection(initialDirection);
-  }, [initialMode, initialDirection]);
+    if (initialA) setA(initialA);
+    if (initialB) setB(initialB);
+  }, [initialMode, initialDirection, initialA, initialB]);
 
   useEffect(() => {
     trackToolView("percentage", mode);
@@ -313,6 +324,16 @@ export function Calculator({
   const applyHistory = (item: HistoryItem) => {
     setMode(item.mode);
   };
+
+  const rateCandidate =
+    mode === "percent-of"
+      ? a
+      : mode === "discount" || mode === "increase-decrease"
+        ? b
+        : "";
+  const matchedRate = rateCandidate ? matchRate(rateCandidate) : null;
+  const rateLink =
+    matchedRate && pathname !== ratePath(matchedRate) ? matchedRate : null;
 
   const percentValue =
     mode === "percent-of" ? parseNum(a) : parseNum(b);
@@ -692,6 +713,17 @@ export function Calculator({
               ))}
             </ol>
           </div>
+        )}
+
+        {rateLink && (
+          <p className="mt-4 text-sm text-slate-600 dark:text-slate-400">
+            <Link
+              href={ratePath(rateLink)}
+              className="font-medium text-emerald-700 underline underline-offset-2 dark:text-emerald-400"
+            >
+              {rateLink}% of common numbers and prices: table and shortcut
+            </Link>
+          </p>
         )}
       </div>
 

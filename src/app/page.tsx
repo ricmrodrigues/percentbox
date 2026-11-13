@@ -9,6 +9,7 @@ import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { JsonLd } from "@/components/JsonLd";
 import { PopularCalculations } from "@/components/PopularCalculations";
+import { RateLinks } from "@/components/RateLinks";
 import { HOME_FAQS, SeoContent } from "@/components/SeoContent";
 import { GUIDES, guideReadingMinutes } from "@/content/guides";
 import {
@@ -163,6 +164,8 @@ export default function Home() {
               </div>
 
               <PopularCalculations />
+
+              <RateLinks heading="Percent of a number" compact />
 
               <nav
                 aria-label="Calculator tools"

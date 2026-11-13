@@ -5,6 +5,9 @@
  * a worked answer in the snippet, titles ≤ 60 chars, descriptions ≤ 150.
  * Titles are absolute (they already include the brand when it fits).
  */
+import { RATE_CONTENT, multiplier, rateRow } from "@/content/rates";
+import type { RateSlug } from "@/lib/rates";
+
 export interface SearchSnippet {
   title: string;
   description: string;
@@ -82,4 +85,22 @@ export const GUIDE_SNIPPETS: Record<string, SearchSnippet> = {
     description:
       "Sale price = price × (1 − rate ÷ 100): 25% off 80 is 60. Why 20% then 10% off is 28%, not 30%. Worked examples, free, no signup.",
   },
+};
+
+/** /percent-of/{rate}: computed from the same exact math as the page table. */
+export function rateSnippet(rate: string): SearchSnippet {
+  const unit = RATE_CONTENT[rate as RateSlug]?.fraction?.match(/^1\/(\d+)$/);
+  const m = unit ? `÷ ${unit[1]}` : `× ${multiplier(rate)}`;
+  const r200 = rateRow(rate, "200");
+  const r80 = rateRow(rate, "80");
+  return {
+    title: `What Is ${rate}% of a Number? Table & Shortcut | PercentBox`,
+    description: `${rate}% of a number = number ${m}. ${rate}% of 200 = ${r200.of}; ${rate}% off 80 = ${r80.off}; 80 plus ${rate}% = ${r80.plus}. Exact table. Free, no signup.`,
+  };
+}
+
+export const RATE_INDEX_SNIPPET: SearchSnippet = {
+  title: "Percent of a Number Tables: 5% to 90% | PercentBox",
+  description:
+    "Tables for 5% to 90%: n% of, n% off and plus n% for round numbers and prices, with a mental-math shortcut for each. Free, no signup.",
 };
