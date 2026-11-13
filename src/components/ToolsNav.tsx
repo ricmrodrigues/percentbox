@@ -79,7 +79,7 @@ export function ToolsNav() {
           id={panelId}
           role="menu"
           aria-label="All calculators"
-          className="absolute right-0 top-full z-50 mt-2 w-[min(100vw-2rem,20rem)] overflow-hidden rounded-2xl border border-slate-200 bg-white py-2 shadow-xl dark:border-slate-700 dark:bg-slate-900 sm:w-80"
+          className="fixed inset-x-3 top-16 z-50 max-h-[min(70vh,28rem)] w-auto overflow-y-auto rounded-2xl border border-slate-200 bg-white py-2 shadow-xl dark:border-slate-700 dark:bg-slate-900 sm:absolute sm:inset-x-auto sm:right-0 sm:top-full sm:mt-2 sm:max-h-none sm:w-80 sm:overflow-hidden"
         >
           <p className="px-4 pb-1.5 pt-1 text-[10px] font-semibold uppercase tracking-wider text-slate-400">
             Choose a tool
